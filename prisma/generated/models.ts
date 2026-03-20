@@ -10,4 +10,6 @@
  */
 export type * from './models/User.ts'
 export type * from './models/UserAuthentication.ts'
+export type * from './models/Session.ts'
+export type * from './models/Invitation.ts'
 export type * from './commonInputTypes.ts'

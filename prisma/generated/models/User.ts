@@ -198,7 +198,10 @@ export type UserWhereInput = {
   avatarPath?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  auth?: Prisma.XOR<Prisma.UserAuthenticationNullableScalarRelationFilter, Prisma.UserAuthenticationWhereInput> | null
+  authentication?: Prisma.XOR<Prisma.UserAuthenticationNullableScalarRelationFilter, Prisma.UserAuthenticationWhereInput> | null
+  sessions?: Prisma.SessionListRelationFilter
+  invitationsCreated?: Prisma.InvitationListRelationFilter
+  invitationsRedeemed?: Prisma.InvitationListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -209,7 +212,10 @@ export type UserOrderByWithRelationInput = {
   avatarPath?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  auth?: Prisma.UserAuthenticationOrderByWithRelationInput
+  authentication?: Prisma.UserAuthenticationOrderByWithRelationInput
+  sessions?: Prisma.SessionOrderByRelationAggregateInput
+  invitationsCreated?: Prisma.InvitationOrderByRelationAggregateInput
+  invitationsRedeemed?: Prisma.InvitationOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -223,7 +229,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   avatarPath?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  auth?: Prisma.XOR<Prisma.UserAuthenticationNullableScalarRelationFilter, Prisma.UserAuthenticationWhereInput> | null
+  authentication?: Prisma.XOR<Prisma.UserAuthenticationNullableScalarRelationFilter, Prisma.UserAuthenticationWhereInput> | null
+  sessions?: Prisma.SessionListRelationFilter
+  invitationsCreated?: Prisma.InvitationListRelationFilter
+  invitationsRedeemed?: Prisma.InvitationListRelationFilter
 }, "id" | "username" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -260,7 +269,10 @@ export type UserCreateInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  auth?: Prisma.UserAuthenticationCreateNestedOneWithoutUserInput
+  authentication?: Prisma.UserAuthenticationCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
+  invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -271,7 +283,10 @@ export type UserUncheckedCreateInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  auth?: Prisma.UserAuthenticationUncheckedCreateNestedOneWithoutUserInput
+  authentication?: Prisma.UserAuthenticationUncheckedCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
+  invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
 }
 
 export type UserUpdateInput = {
@@ -282,7 +297,10 @@ export type UserUpdateInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  auth?: Prisma.UserAuthenticationUpdateOneWithoutUserNestedInput
+  authentication?: Prisma.UserAuthenticationUpdateOneWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
+  invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -293,7 +311,10 @@ export type UserUncheckedUpdateInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  auth?: Prisma.UserAuthenticationUncheckedUpdateOneWithoutUserNestedInput
+  authentication?: Prisma.UserAuthenticationUncheckedUpdateOneWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
+  invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -361,6 +382,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -373,21 +399,65 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type UserCreateNestedOneWithoutAuthInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthInput, Prisma.UserUncheckedCreateWithoutAuthInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthInput
+export type UserCreateNestedOneWithoutAuthenticationInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthenticationInput, Prisma.UserUncheckedCreateWithoutAuthenticationInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthenticationInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutAuthNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthInput, Prisma.UserUncheckedCreateWithoutAuthInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthInput
-  upsert?: Prisma.UserUpsertWithoutAuthInput
+export type UserUpdateOneRequiredWithoutAuthenticationNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthenticationInput, Prisma.UserUncheckedCreateWithoutAuthenticationInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthenticationInput
+  upsert?: Prisma.UserUpsertWithoutAuthenticationInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthInput, Prisma.UserUpdateWithoutAuthInput>, Prisma.UserUncheckedUpdateWithoutAuthInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthenticationInput, Prisma.UserUpdateWithoutAuthenticationInput>, Prisma.UserUncheckedUpdateWithoutAuthenticationInput>
 }
 
-export type UserCreateWithoutAuthInput = {
+export type UserCreateNestedOneWithoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsInput
+  upsert?: Prisma.UserUpsertWithoutSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
+}
+
+export type UserCreateNestedOneWithoutInvitationsCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvitationsCreatedInput, Prisma.UserUncheckedCreateWithoutInvitationsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvitationsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutInvitationsRedeemedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvitationsRedeemedInput, Prisma.UserUncheckedCreateWithoutInvitationsRedeemedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvitationsRedeemedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInvitationsCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvitationsCreatedInput, Prisma.UserUncheckedCreateWithoutInvitationsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvitationsCreatedInput
+  upsert?: Prisma.UserUpsertWithoutInvitationsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvitationsCreatedInput, Prisma.UserUpdateWithoutInvitationsCreatedInput>, Prisma.UserUncheckedUpdateWithoutInvitationsCreatedInput>
+}
+
+export type UserUpdateOneWithoutInvitationsRedeemedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvitationsRedeemedInput, Prisma.UserUncheckedCreateWithoutInvitationsRedeemedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvitationsRedeemedInput
+  upsert?: Prisma.UserUpsertWithoutInvitationsRedeemedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvitationsRedeemedInput, Prisma.UserUpdateWithoutInvitationsRedeemedInput>, Prisma.UserUncheckedUpdateWithoutInvitationsRedeemedInput>
+}
+
+export type UserCreateWithoutAuthenticationInput = {
   id?: string
   username: string
   displayName?: string | null
@@ -395,9 +465,12 @@ export type UserCreateWithoutAuthInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
+  invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
 }
 
-export type UserUncheckedCreateWithoutAuthInput = {
+export type UserUncheckedCreateWithoutAuthenticationInput = {
   id?: string
   username: string
   displayName?: string | null
@@ -405,25 +478,28 @@ export type UserUncheckedCreateWithoutAuthInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
+  invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
 }
 
-export type UserCreateOrConnectWithoutAuthInput = {
+export type UserCreateOrConnectWithoutAuthenticationInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuthInput, Prisma.UserUncheckedCreateWithoutAuthInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthenticationInput, Prisma.UserUncheckedCreateWithoutAuthenticationInput>
 }
 
-export type UserUpsertWithoutAuthInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAuthInput, Prisma.UserUncheckedUpdateWithoutAuthInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuthInput, Prisma.UserUncheckedCreateWithoutAuthInput>
+export type UserUpsertWithoutAuthenticationInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuthenticationInput, Prisma.UserUncheckedUpdateWithoutAuthenticationInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthenticationInput, Prisma.UserUncheckedCreateWithoutAuthenticationInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutAuthInput = {
+export type UserUpdateToOneWithWhereWithoutAuthenticationInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAuthInput, Prisma.UserUncheckedUpdateWithoutAuthInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuthenticationInput, Prisma.UserUncheckedUpdateWithoutAuthenticationInput>
 }
 
-export type UserUpdateWithoutAuthInput = {
+export type UserUpdateWithoutAuthenticationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -431,9 +507,12 @@ export type UserUpdateWithoutAuthInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
+  invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
 }
 
-export type UserUncheckedUpdateWithoutAuthInput = {
+export type UserUncheckedUpdateWithoutAuthenticationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -441,8 +520,262 @@ export type UserUncheckedUpdateWithoutAuthInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
+  invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
 }
 
+export type UserCreateWithoutSessionsInput = {
+  id?: string
+  username: string
+  displayName?: string | null
+  email: string
+  avatarPath?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  authentication?: Prisma.UserAuthenticationCreateNestedOneWithoutUserInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
+  invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
+}
+
+export type UserUncheckedCreateWithoutSessionsInput = {
+  id?: string
+  username: string
+  displayName?: string | null
+  email: string
+  avatarPath?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  authentication?: Prisma.UserAuthenticationUncheckedCreateNestedOneWithoutUserInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
+  invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
+}
+
+export type UserCreateOrConnectWithoutSessionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
+}
+
+export type UserUpsertWithoutSessionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSessionsInput, Prisma.UserUncheckedUpdateWithoutSessionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSessionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSessionsInput, Prisma.UserUncheckedUpdateWithoutSessionsInput>
+}
+
+export type UserUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authentication?: Prisma.UserAuthenticationUpdateOneWithoutUserNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
+  invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authentication?: Prisma.UserAuthenticationUncheckedUpdateOneWithoutUserNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
+  invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
+}
+
+export type UserCreateWithoutInvitationsCreatedInput = {
+  id?: string
+  username: string
+  displayName?: string | null
+  email: string
+  avatarPath?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  authentication?: Prisma.UserAuthenticationCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
+}
+
+export type UserUncheckedCreateWithoutInvitationsCreatedInput = {
+  id?: string
+  username: string
+  displayName?: string | null
+  email: string
+  avatarPath?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  authentication?: Prisma.UserAuthenticationUncheckedCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
+}
+
+export type UserCreateOrConnectWithoutInvitationsCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvitationsCreatedInput, Prisma.UserUncheckedCreateWithoutInvitationsCreatedInput>
+}
+
+export type UserCreateWithoutInvitationsRedeemedInput = {
+  id?: string
+  username: string
+  displayName?: string | null
+  email: string
+  avatarPath?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  authentication?: Prisma.UserAuthenticationCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
+}
+
+export type UserUncheckedCreateWithoutInvitationsRedeemedInput = {
+  id?: string
+  username: string
+  displayName?: string | null
+  email: string
+  avatarPath?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  authentication?: Prisma.UserAuthenticationUncheckedCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
+}
+
+export type UserCreateOrConnectWithoutInvitationsRedeemedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvitationsRedeemedInput, Prisma.UserUncheckedCreateWithoutInvitationsRedeemedInput>
+}
+
+export type UserUpsertWithoutInvitationsCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInvitationsCreatedInput, Prisma.UserUncheckedUpdateWithoutInvitationsCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvitationsCreatedInput, Prisma.UserUncheckedCreateWithoutInvitationsCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInvitationsCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInvitationsCreatedInput, Prisma.UserUncheckedUpdateWithoutInvitationsCreatedInput>
+}
+
+export type UserUpdateWithoutInvitationsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authentication?: Prisma.UserAuthenticationUpdateOneWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInvitationsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authentication?: Prisma.UserAuthenticationUncheckedUpdateOneWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
+}
+
+export type UserUpsertWithoutInvitationsRedeemedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInvitationsRedeemedInput, Prisma.UserUncheckedUpdateWithoutInvitationsRedeemedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvitationsRedeemedInput, Prisma.UserUncheckedCreateWithoutInvitationsRedeemedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInvitationsRedeemedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInvitationsRedeemedInput, Prisma.UserUncheckedUpdateWithoutInvitationsRedeemedInput>
+}
+
+export type UserUpdateWithoutInvitationsRedeemedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authentication?: Prisma.UserAuthenticationUpdateOneWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInvitationsRedeemedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authentication?: Prisma.UserAuthenticationUncheckedUpdateOneWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
+}
+
+
+/**
+ * Count Type UserCountOutputType
+ */
+
+export type UserCountOutputType = {
+  sessions: number
+  invitationsCreated: number
+  invitationsRedeemed: number
+}
+
+export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+  invitationsCreated?: boolean | UserCountOutputTypeCountInvitationsCreatedArgs
+  invitationsRedeemed?: boolean | UserCountOutputTypeCountInvitationsRedeemedArgs
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserCountOutputType
+   */
+  select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SessionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInvitationsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvitationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInvitationsRedeemedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvitationWhereInput
+}
 
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -453,7 +786,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   avatarPath?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  auth?: boolean | Prisma.User$authArgs<ExtArgs>
+  authentication?: boolean | Prisma.User$authenticationArgs<ExtArgs>
+  sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  invitationsCreated?: boolean | Prisma.User$invitationsCreatedArgs<ExtArgs>
+  invitationsRedeemed?: boolean | Prisma.User$invitationsRedeemedArgs<ExtArgs>
+  _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -488,7 +825,11 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "displayName" | "email" | "avatarPath" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  auth?: boolean | Prisma.User$authArgs<ExtArgs>
+  authentication?: boolean | Prisma.User$authenticationArgs<ExtArgs>
+  sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  invitationsCreated?: boolean | Prisma.User$invitationsCreatedArgs<ExtArgs>
+  invitationsRedeemed?: boolean | Prisma.User$invitationsRedeemedArgs<ExtArgs>
+  _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -496,7 +837,10 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    auth: Prisma.$UserAuthenticationPayload<ExtArgs> | null
+    authentication: Prisma.$UserAuthenticationPayload<ExtArgs> | null
+    sessions: Prisma.$SessionPayload<ExtArgs>[]
+    invitationsCreated: Prisma.$InvitationPayload<ExtArgs>[]
+    invitationsRedeemed: Prisma.$InvitationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -900,7 +1244,10 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  auth<T extends Prisma.User$authArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authArgs<ExtArgs>>): Prisma.Prisma__UserAuthenticationClient<runtime.Types.Result.GetResult<Prisma.$UserAuthenticationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  authentication<T extends Prisma.User$authenticationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authenticationArgs<ExtArgs>>): Prisma.Prisma__UserAuthenticationClient<runtime.Types.Result.GetResult<Prisma.$UserAuthenticationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invitationsCreated<T extends Prisma.User$invitationsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invitationsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invitationsRedeemed<T extends Prisma.User$invitationsRedeemedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invitationsRedeemedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1330,9 +1677,9 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.auth
+ * User.authentication
  */
-export type User$authArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$authenticationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the UserAuthentication
    */
@@ -1346,6 +1693,78 @@ export type User$authArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
    */
   include?: Prisma.UserAuthenticationInclude<ExtArgs> | null
   where?: Prisma.UserAuthenticationWhereInput
+}
+
+/**
+ * User.sessions
+ */
+export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Session
+   */
+  select?: Prisma.SessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Session
+   */
+  omit?: Prisma.SessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SessionInclude<ExtArgs> | null
+  where?: Prisma.SessionWhereInput
+  orderBy?: Prisma.SessionOrderByWithRelationInput | Prisma.SessionOrderByWithRelationInput[]
+  cursor?: Prisma.SessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
+}
+
+/**
+ * User.invitationsCreated
+ */
+export type User$invitationsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invitation
+   */
+  select?: Prisma.InvitationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invitation
+   */
+  omit?: Prisma.InvitationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationInclude<ExtArgs> | null
+  where?: Prisma.InvitationWhereInput
+  orderBy?: Prisma.InvitationOrderByWithRelationInput | Prisma.InvitationOrderByWithRelationInput[]
+  cursor?: Prisma.InvitationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvitationScalarFieldEnum | Prisma.InvitationScalarFieldEnum[]
+}
+
+/**
+ * User.invitationsRedeemed
+ */
+export type User$invitationsRedeemedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invitation
+   */
+  select?: Prisma.InvitationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invitation
+   */
+  omit?: Prisma.InvitationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationInclude<ExtArgs> | null
+  where?: Prisma.InvitationWhereInput
+  orderBy?: Prisma.InvitationOrderByWithRelationInput | Prisma.InvitationOrderByWithRelationInput[]
+  cursor?: Prisma.InvitationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvitationScalarFieldEnum | Prisma.InvitationScalarFieldEnum[]
 }
 
 /**

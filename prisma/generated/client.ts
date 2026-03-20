@@ -51,3 +51,13 @@ export type User = Prisma.UserModel
  * 
  */
 export type UserAuthentication = Prisma.UserAuthenticationModel
+/**
+ * Model Session
+ * 
+ */
+export type Session = Prisma.SessionModel
+/**
+ * Model Invitation
+ * 
+ */
+export type Invitation = Prisma.InvitationModel

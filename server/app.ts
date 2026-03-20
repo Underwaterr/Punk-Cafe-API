@@ -1,5 +1,6 @@
 import express from 'express'
 import entitiesRouter from './entities/router.ts'
+import servicesRouter from './services/router.ts'
 
 let app = express()
 
@@ -17,6 +18,7 @@ app.get('/', (_, response)=> {
   response.json({ok: true})
 })
 
+app.use(servicesRouter)
 app.use(entitiesRouter)
 
 // 404 handler — must be last
