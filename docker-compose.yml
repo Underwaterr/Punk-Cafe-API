@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:18.3
+    container_name: punk-cafe-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: punk_cafe_admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: punk_cafe
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:

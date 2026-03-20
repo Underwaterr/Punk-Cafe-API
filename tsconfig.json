@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+     "target": "esnext",
+     "rewriteRelativeImportExtensions": true,
+     
+     // no transpilation; Node runs the `.ts` files directly
+     "noEmit": true,
+
+     // use Node's navive module resolution rules
+     "module": "nodenext",
+
+     // no TypeScript features that require transpilation
+     // (enums, namespaces, parameter properties)
+     "erasableSyntaxOnly": true
+
+     // require `import type` for importing types
+     "verbatimModuleSyntax": true,
+
+  }
+}

@@ -1,0 +1,40 @@
+model User {
+  id          String                        @id @default(dbgenerated("uuidv7()"))
+  username    String                        @unique
+  displayName String?  @map("display_name")
+  email       String                        @unique
+  avatarPath  String?  @map("avatar_path")
+  createdAt   DateTime @map("created_at")   @default(now()) 
+  updatedAt   DateTime @map("updated_at")   @updatedAt 
+
+  auth UserAuthentication?
+
+  @@map("users")
+}
+
+// TODO:
+// move failedAttempts ad lockedUntil to Redis cache
+// passwordChagedAt is for invalidating tokens issued before a password change
+model UserAuthentication {
+  id                String                                @id @default(dbgenerated("uuidv7()"))
+  userId            String    @map("user_id")             @unique 
+  passwordHash      String    @map("password_hash")
+  failedAttempts    Int       @map("failed_attempts")     @default(0) 
+  lockedUntil       DateTime? @map("locked_until")
+  passwordChangedAt DateTime  @map("password_changed_at") @default(now()) 
+  createdAt         DateTime  @map("created_at")          @default(now()) 
+  updatedAt         DateTime  @map("updated_at")          @updatedAt 
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_authentication")
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}

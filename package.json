@@ -1,0 +1,32 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "node index.ts",
+    "dev": "node --watch index.ts",
+    "test": "node --test '**/test.ts'",
+    "test": "DATABASE_URL=postgresql://punk_cafe_admin:password@localhost:5432/punk_cafe_test node --test '**/*.test.ts'",
+    "db:start": "docker compose up -d",
+    "db:stop": "docker compose down",
+    "db:reset": "docker compose down -v",
+    "db:test:create": "docker exec punk-cafe-db createdb -U punk_cafe_admin punk_cafe_test",
+    "db:test:migrate": "DATABASE_URL=postgresql://punk_cafe_admin:password@localhost:5432/punk_cafe_test npx prisma migrate deploy"
+  },
+  "imports": {
+    "#prisma": "./server/database.ts",
+    "#prisma-client": "./prisma/generated/client.ts",
+    "#test": "./test-utilities.ts"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.5.0",
+    "@prisma/client": "^7.5.0",
+    "@vinejs/vine": "^4.3.0",
+    "express": "^5.2.1",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.5.0",
+    "@types/pg": "^8.18.0",
+    "prisma": "^7.5.0"
+  }
+}
