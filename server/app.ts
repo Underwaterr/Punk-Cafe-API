@@ -19,4 +19,11 @@ app.get('/', (_, response)=> {
 
 app.use(entitiesRouter)
 
+// 404 handler — must be last
+app.use((_request, response)=> {
+  response
+    .status(404)
+    .json({ error: 'Not found' })
+})
+
 export default app

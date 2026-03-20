@@ -18,4 +18,8 @@ export async function stopServer() {
   await prisma.$disconnect()
 }
 
+export async function resetDatabase() {
+  await prisma.$executeRawUnsafe(`TRUNCATE users, user_authentication CASCADE`)
+}
+
 export { baseUrl }
