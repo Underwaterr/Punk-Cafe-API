@@ -14,5 +14,9 @@ export default {
   login: vine.object({
     email: vine.string().email(),
     password: vine.string()
+  }),
+  passwordChange: vine.object({
+    currentPassword: vine.string(),
+    newPassword: vine.string().minLength(12).maxLength(128),
   })
 }

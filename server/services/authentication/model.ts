@@ -2,6 +2,11 @@ import prisma from '#prisma'
 import argon2 from 'argon2'
 import generateToken from './generate-token.ts'
 
+// speed up argon2 hashing when testing
+let hashOptions = (process.env.NODE_ENV == 'test')
+  ? { memoryCost: 1024, timeCost: 1, parallelism: 1 } 
+  : null
+
 export default {
   findInvitation(code:string) {
     return prisma.invitation.findUnique({ where:{code} })
@@ -19,10 +24,6 @@ export default {
     return prisma.user.findUnique({ where:{username} })
   },
   async registerUser(username:string, email:string, password:string, code:string) {
-    // speed up hashing when testing
-    let hashOptions = (process.env.NODE_ENV == 'test')
-      ? { memoryCost: 1024, timeCost: 1, parallelism: 1 } 
-      : null
     let passwordHash = await argon2.hash(password, hashOptions)
 
     return prisma.$transaction(async tx=> {
@@ -56,6 +57,14 @@ export default {
   deleteSession(token:string) {
     return prisma.session.delete({ where: {token} })
   },
+  deleteOtherSessions(userId:string, currentToken:string) {
+    return prisma.session.deleteMany({
+      where: {
+        userId,
+        token: { not: currentToken },
+      },
+    })
+  },
   incrementFailedAttempts(id:string, lockUntil:Date|null=null) { 
     return prisma.userAuthentication.update({
       where: { id },
@@ -73,5 +82,28 @@ export default {
         lockedUntil: null,
       },
     })
+  },
+  async changePassword(userId:string, currentPassword:string, newPassword:string) {
+    let user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { authentication: true },
+    })
+
+    if (!user?.authentication) return { error: 'no auth found' }
+
+    let valid = await argon2.verify(user.authentication.passwordHash, currentPassword)
+    if (!valid) return { error: 'wrong password' }
+
+    let passwordHash = await argon2.hash(newPassword, hashOptions)
+
+    await prisma.userAuthentication.update({
+      where: { id: user.authentication.id },
+      data: {
+        passwordHash,
+        passwordChangedAt: new Date(),
+      },
+    })
+
+    return { error: null }
   }
 }

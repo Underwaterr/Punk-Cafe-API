@@ -47,6 +47,7 @@ describe('POST /authentication/register', ()=> {
     assert.ok(data.session.expiresAt)
     assert.equal(data.user.username, 'garfield')
   })
+
   it('redeems the invitation', async ()=> {
     await createInvitation()
     await request.post('authentication/register', user)
@@ -249,3 +250,16 @@ describe('POST /authentication/logout', () => {
   })
 })
 
+describe('PUT /authentication/password', () => {
+  // it('invalidates other sessions on password change', async ()=> {
+
+  it('keeps current session valid after password change', async () => {
+    await request.authenticated.put('authentication/password', {
+      currentPassword: 'this-is-a-password',
+      newPassword: 'new-password-12345',
+    })
+
+    let response = await request.authenticated.get('users/me')
+    assert.equal(response.status, 200)
+  })
+})

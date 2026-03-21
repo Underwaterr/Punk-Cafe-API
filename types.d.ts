@@ -10,7 +10,8 @@ declare global {
   }
   namespace Express {
     interface Request {
-      user?: import('./prisma/generated/client.ts').User
+      user?: import('./prisma/generated/client.ts').User,
+      sessionToken: string
     }
   }
 }

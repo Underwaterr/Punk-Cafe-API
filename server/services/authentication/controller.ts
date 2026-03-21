@@ -78,5 +78,19 @@ export default {
     // Valid session token, log out!
     await Authentication.deleteSession(token)
     return response.status(200).json({ ok: true })
+  },
+
+  async changePassword(request:Request, response:Response) {
+    let result = await validate(schemas.passwordChange, request.body)
+    if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
+
+    let { currentPassword, newPassword } = result.value
+    let outcome = await Authentication.changePassword(request.user!.id, currentPassword, newPassword)
+    if (outcome.error == 'no auth found') return response.status(500).json({ error: 'Authentication record not found' })
+    if (outcome.error == 'wrong password') return response.status(401).json({ error: 'Current password is incorrect' })
+
+    await Authentication.deleteOtherSessions(request.user!.id, request.sessionToken!)
+
+    return response.status(200).json({ ok: true })
   }
 }

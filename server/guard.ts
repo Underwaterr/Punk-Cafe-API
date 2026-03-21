@@ -23,6 +23,7 @@ export default async function requireAuthentication(request:Request, response:Re
   // update the database (no `await`, we don't want to block the thread!)
   prisma.session.update({ where: {token}, data: { lastActive: new Date() } })
 
+  request.sessionToken = token
   request.user = session.user
   next()
 }
