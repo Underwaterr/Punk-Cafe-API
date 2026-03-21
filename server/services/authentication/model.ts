@@ -42,6 +42,12 @@ export default {
     let data = { token, userId, expiresAt }
     return prisma.session.create({ data })
   },
+  findSession(token:string) {
+    return prisma.session.findUnique({
+      where: { token },
+      include: { user: true },
+    })
+  },
   incrementFailedAttempts(id:string, lockUntil:Date|null=null) { 
     return prisma.userAuthentication.update({
       where: { id },

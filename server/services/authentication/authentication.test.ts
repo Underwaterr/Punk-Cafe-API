@@ -33,24 +33,23 @@ async function createInvitation() {
 async function registerUser() {
   let invitation = await createInvitation()
   // we must do it thru the endpoint to make sure the password gets hashed
-  return await request('authentication/register', 'POST', { ...user, code: invitation.code })
+  return await request.post('authentication/register', { ...user, code: invitation.code })
 }
 
-describe('POST /authentication', ()=> {
+describe('POST /authentication/register', ()=> {
 
   it('creates a user and returns a session token', async ()=> {
     await createInvitation()
-    let response = await request('authentication/register', 'POST', user)
+    let response = await request.post('authentication/register', user)
     let data = await response.json()
     assert.equal(response.status, 201)
     assert.ok(data.session.token)
     assert.ok(data.session.expiresAt)
     assert.equal(data.user.username, 'garfield')
   })
-
   it('redeems the invitation', async ()=> {
     await createInvitation()
-    await request('authentication/register', 'POST', user)
+    await request.post('authentication/register', user)
     let invitation = await prisma.invitation.findUnique({
       where: { code: 'test-invite-code' }
     })
@@ -60,7 +59,7 @@ describe('POST /authentication', ()=> {
 
   it('returns 400 for invalid username', async ()=> {
     let badUser = { ...user, username: '' }
-    let response = await request('authentication/register', 'POST', badUser)
+    let response = await request.post('authentication/register', badUser)
     let data = await response.json()
     assert.equal(response.status, 400)
     assert.equal(data.error, 'Invalid input')
@@ -68,7 +67,7 @@ describe('POST /authentication', ()=> {
 
   it('returns 400 for invalid password', async ()=> {
     let badUser = { ...user, password: 'short' }
-    let response = await request('authentication/register', 'POST', badUser)
+    let response = await request.post('authentication/register', badUser)
     let data = await response.json()
     assert.equal(response.status, 400)
     assert.equal(data.error, 'Invalid input')
@@ -76,7 +75,7 @@ describe('POST /authentication', ()=> {
 
   it('returns 400 for invalid email', async ()=> {
     let badUser = { ...user, email: 'invalid-email' }
-    let response = await request('authentication/register', 'POST', badUser)
+    let response = await request.post('authentication/register', badUser)
     let data = await response.json()
     assert.equal(response.status, 400)
     assert.equal(data.error, 'Invalid input')
@@ -84,7 +83,7 @@ describe('POST /authentication', ()=> {
 
   it('returns 400 for an invalid invite code', async ()=> {
     let badUser = { ...user, code: 'invalid-code' }
-    let response = await request('authentication/register', 'POST', badUser)
+    let response = await request.post('authentication/register', badUser)
     let data = await response.json()
     assert.equal(response.status, 400)
     assert.equal(data.error, 'Invalid invite code')
@@ -99,7 +98,7 @@ describe('POST /authentication', ()=> {
         redeemedAt: new Date(),
       },
     })
-    let response = await request('authentication/register', 'POST', user)
+    let response = await request.post('authentication/register', user)
     let data = await response.json()
     assert.equal(response.status, 400)
     assert.equal(data.error, 'Invite code already used')
@@ -114,7 +113,7 @@ describe('POST /authentication', ()=> {
         authentication: { create: { passwordHash: 'not-real' } },
       },
     })
-    let response = await request('authentication/register', 'POST', user)
+    let response = await request.post('authentication/register', user)
     let data = await response.json()
     assert.equal(response.status, 409)
     assert.equal(data.error, 'Username already taken')
@@ -129,20 +128,19 @@ describe('POST /authentication', ()=> {
         authentication: { create: { passwordHash: 'not-real' } },
       },
     })
-    let response = await request('authentication/register', 'POST', user)
+    let response = await request.post('authentication/register', user)
     let data = await response.json()
     assert.equal(response.status, 409)
     assert.equal(data.error, 'Email already taken')
   })
 })
 
-
 describe('POST /authentication/login', ()=> {
   it('returns a session token on valid credentials', async ()=> {
     await registerUser()
 
     let body = { email: user.email, password: user.password }
-    let response = await request('authentication/login', 'POST', body)
+    let response = await request.post('authentication/login', body)
     let data = await response.json()
 
     assert.equal(response.status, 200)
@@ -154,7 +152,7 @@ describe('POST /authentication/login', ()=> {
   it('returns 401 for a wrong password', async ()=> {
     await registerUser()
     let body = { email: user.email, password: 'bad-password' }
-    let response = await request('authentication/login', 'POST', body)
+    let response = await request.post('authentication/login', body)
     let data = await response.json()
     assert.equal(response.status, 401)
     assert.equal(data.error, 'Invalid email or password')
@@ -163,7 +161,7 @@ describe('POST /authentication/login', ()=> {
   it('returns 401 for a wrong email', async ()=> {
     await registerUser()
     let body = { email: 'bad@example.com', password: user.password }
-    let response = await request('authentication/login', 'POST', body)
+    let response = await request.post('authentication/login', body)
     let data = await response.json()
     assert.equal(response.status, 401)
     assert.equal(data.error, 'Invalid email or password')
@@ -171,14 +169,14 @@ describe('POST /authentication/login', ()=> {
 
   it('returns 400 for invalid email', async ()=> {
     let body = { email: 'invalid', password: user.password }
-    let response = await request('authentication/login', 'POST', body)
+    let response = await request.post('authentication/login', body)
     assert.equal(response.status, 400) 
   })
 
   it('increments failed attempts on wrong password', async ()=> {
     await registerUser()
     let body = { email: user.email, password: 'bad-password' }
-    await request('authentication/login', 'POST', body)
+    await request.post('authentication/login', body)
     let testUser = await prisma.user.findUnique({
       where: { email: user.email },
       include: { authentication: true },
@@ -190,10 +188,10 @@ describe('POST /authentication/login', ()=> {
     await registerUser()
 
     let body = { email: user.email, password: 'bad-password' }
-    await request('authentication/login', 'POST', body)
+    await request.post('authentication/login', body)
 
     body.password = user.password
-    await request('authentication/login', 'POST', body)
+    await request.post('authentication/login', body)
 
     let testUser = await prisma.user.findUnique({
       where: { email: user.email },
@@ -207,9 +205,9 @@ describe('POST /authentication/login', ()=> {
     await registerUser()
 
     let body = { email: user.email, password: 'bad-password' }
-    for (let i=0; i<5; i++) await request('authentication/login', 'POST', body)
+    for (let i=0; i<5; i++) await request.post('authentication/login', body)
 
-    let response = await request('authentication/login', 'POST', body)
+    let response = await request.post('authentication/login', body)
     let data = await response.json()
 
     assert.equal(response.status, 423)
@@ -222,13 +220,13 @@ describe('POST /authentication/login', ()=> {
     await registerUser()
 
     let body = { email: user.email, password: 'bad-password' }
-    for (let i=0; i<5; i++) await request('authentication/login', 'POST', body)
+    for (let i=0; i<5; i++) await request.post('authentication/login', body)
     
     // let's pretend 15 minutes have passed
     mock.timers.tick(15 * 60 * 1000)
 
     body.password = user.password
-    let response = await request('authentication/login', 'POST', body)
+    let response = await request.post('authentication/login', body)
     assert.equal(response.status, 200)
 
     mock.timers.reset()

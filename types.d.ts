@@ -8,4 +8,9 @@ declare global {
       TEST_DATABASE_URL: string
     }
   }
+  namespace Express {
+    interface Request {
+      user?: import('./prisma/generated/client.ts').User
+    }
+  }
 }
