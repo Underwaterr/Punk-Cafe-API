@@ -1,5 +1,5 @@
 import prisma from '#prisma'
-import { processImage } from '../../services/image/process.ts'
+import { processImage } from '../../image-process.ts'
 
 let select = {
   id: true,
