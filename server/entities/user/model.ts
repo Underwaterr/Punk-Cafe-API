@@ -1,4 +1,5 @@
 import prisma from '#prisma'
+import { deleteAvatar, deleteImages } from '../../image-process.ts'
 
 let select = { id: true, username: true, displayName: true, avatarPath: true, createdAt: true } as const
 
@@ -17,11 +18,34 @@ export default {
     }) 
   },
 
-  updateAvatar(id: string, avatarPath: string) {
+  updateAvatar(id:string, avatarPath:string) {
     return prisma.user.update({
       where: { id },
       data: { avatarPath },
       select,
     })
+  },
+
+  async remove(id:string) {
+    let user = await prisma.user.findUnique({
+      where: { id },
+      include: {
+        posts: { include: { images: true } },
+      },
+    })
+
+    if (!user) return null
+
+    // delete all post images from disk
+    let allImages = user.posts.flatMap(post => post.images)
+    await deleteImages(allImages)
+
+    // delete avatar from disk
+    if (user.avatarPath) await deleteAvatar(user.avatarPath)
+
+    // delete the user
+    await prisma.user.delete({ where: { id } })
+
+    return user
   }
 }

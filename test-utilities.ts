@@ -9,10 +9,13 @@ import './env.ts'
 let server: Server
 let baseUrl: string
 let cachedToken: string | null = null
+let cachedImage: Buffer
 
 export async function createTestImage() {
+  if (cachedImage) return cachedImage
   let redSquare = { width:800, height:800, channels:3, background:'red' } as const
-  return await sharp({ create: redSquare }).png().toBuffer()
+  cachedImage = await sharp({ create: redSquare }).png().toBuffer()
+  return cachedImage
 }
 
 export function startServer() {

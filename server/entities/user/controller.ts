@@ -36,5 +36,10 @@ export default {
     let user = await User.updateAvatar(request.user!.id, avatarPath)
 
     return response.json(user)
+  },
+
+  async removeMe(request:Request, response:Response) {
+    await User.remove(request.user!.id)
+    return response.status(200).json({ ok: true })
   }
 }

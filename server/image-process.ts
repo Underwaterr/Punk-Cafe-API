@@ -83,3 +83,8 @@ export async function deleteImage(imagePath:string, thumbnailPath:string) {
 export async function deleteImages(images: { imagePath:string, thumbnailPath:string}[]) {
   await Promise.all(images.map(i=> deleteImage(i.imagePath, i.thumbnailPath)))
 }
+
+export async function deleteAvatar(avatarPath:string) {
+  let fullPath = path.resolve(uploadDirectory, avatarPath)
+  await rm(fullPath, { force: true })
+}

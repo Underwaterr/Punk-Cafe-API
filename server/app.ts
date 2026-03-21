@@ -1,4 +1,5 @@
 import express from 'express'
+import type { Request, Response, NextFunction } from 'express'
 import guard from './guard.ts'
 import entitiesRouter from './entities/router.ts'
 import servicesRouter from './services/router.ts'

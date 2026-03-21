@@ -19,7 +19,12 @@ export default {
     return prisma.user.findUnique({ where:{username} })
   },
   async registerUser(username:string, email:string, password:string, code:string) {
-    let passwordHash = await argon2.hash(password)
+    // speed up hashing when testing
+    let hashOptions = (process.env.NODE_ENV == 'test')
+      ? { memoryCost: 1024, timeCost: 1, parallelism: 1 } 
+      : null
+    let passwordHash = await argon2.hash(password, hashOptions)
+
     return prisma.$transaction(async tx=> {
       // Create the User
       let user = await tx.user.create({

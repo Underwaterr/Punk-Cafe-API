@@ -105,3 +105,62 @@ describe('POST /users/me/avatar', () => {
     assert.equal(response.status, 401)
   })
 })
+
+describe('DELETE /users/me', () => {
+  it('deletes the authenticated user', async () => {
+    let response = await request.authenticated.delete('users/me')
+    assert.equal(response.status, 200)
+  })
+
+  it('invalidates the session after deletion', async () => {
+    await request.authenticated.delete('users/me')
+    let response = await request.authenticated.get('users/me')
+    assert.equal(response.status, 401)
+  })
+
+  it('deletes the users posts', async () => {
+    let image = await createTestImage()
+    let created = await request.authenticated.uploadImage('posts', image, 'photo.png')
+    let post = await created.json()
+
+    await request.authenticated.delete('users/me')
+
+    // need a new user to check the feed
+    await cleanup()
+    let response = await request.authenticated.get('posts')
+    let data = await response.json()
+    assert.equal(data.length, 0)
+  })
+
+  it('deletes post images from disk', async () => {
+    let image = await createTestImage()
+    let created = await request.authenticated.uploadImage('posts', image, 'photo.png')
+    let post = await created.json()
+    let imagePath = post.images[0].imagePath
+
+    await request.authenticated.delete('users/me')
+
+    // need a new user to check the image
+    await cleanup()
+    let response = await request.authenticated.get('uploads/' + imagePath)
+    assert.equal(response.status, 404)
+  })
+
+  it('deletes avatar from disk', async () => {
+    let image = await createTestImage()
+    let uploaded = await request.authenticated.uploadImage('users/me/avatar', image, 'avatar.png')
+    let data = await uploaded.json()
+    let avatarPath = data.avatarPath
+
+    await request.authenticated.delete('users/me')
+
+    await cleanup()
+    let response = await request.authenticated.get('uploads/' + avatarPath)
+    assert.equal(response.status, 404)
+  })
+
+  it('returns 401 without a token', async () => {
+    let response = await request.delete('users/me')
+    assert.equal(response.status, 401)
+  })
+})

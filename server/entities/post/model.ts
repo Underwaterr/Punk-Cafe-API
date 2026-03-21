@@ -1,4 +1,3 @@
-import path from 'node:path'
 import prisma from '#prisma'
 import { processImage, deleteImages } from '../../image-process.ts'
 
