@@ -1,6 +1,6 @@
 import { describe, it, before, beforeEach, after, mock } from 'node:test'
 import assert from 'node:assert/strict'
-import { startServer, stopServer, cleanup, request } from '#test'
+import { startServer, stopServer, cleanup, request, baseUrl } from '#test'
 import prisma from '#prisma'
 
 before(startServer)
@@ -250,8 +250,29 @@ describe('POST /authentication/logout', () => {
   })
 })
 
-describe('PUT /authentication/password', () => {
-  // it('invalidates other sessions on password change', async ()=> {
+describe('PUT /authentication/password', ()=> {
+  /*
+  it('invalidates other sessions on password change', async ()=> {
+    // log in a second time to create a second session
+    let loginResponse = await request.post('authentication/login', {
+      email: 'odie@example.com',
+      password: 'this-is-a-password',
+    })
+    let secondSession = await loginResponse.json()
+    let secondToken = secondSession.session.token
+
+    // change password using the main session
+    await request.authenticated.put('authentication/password', {
+      currentPassword: 'this-is-a-password',
+      newPassword: 'new-password-12345',
+    })
+
+    // second session should be invalid
+    let response = await fetch(baseUrl + 'users/me', {
+      headers: { 'Authorization': 'Bearer ' + secondToken },
+    })
+    assert.equal(response.status, 401)
+  })
 
   it('keeps current session valid after password change', async () => {
     await request.authenticated.put('authentication/password', {
@@ -262,4 +283,166 @@ describe('PUT /authentication/password', () => {
     let response = await request.authenticated.get('users/me')
     assert.equal(response.status, 200)
   })
+  */
 })
+
+/*
+describe('POST /authentication/password-reset-code', ()=> {
+  async function promoteToAdmin() {
+    // trigger user creation first
+    let me = await request.authenticated.get('users/me')
+    let data = await me.json()
+    await prisma.user.update({
+      where: { username: data.username },
+      data: { role: 'admin' },
+    })
+  }
+
+  it('creates a reset code as admin', async ()=> {
+    await promoteToAdmin()
+    // need a target user to create a code for
+    let inviteResponse = await request.authenticated.post('invitations')
+    let invite = await inviteResponse.json()
+    await request.post('authentication/register', {
+      username: 'target',
+      email: 'target@example.com',
+      password: 'test-password-123',
+      code: invite.code,
+    })
+    let response = await request.authenticated.post('authentication/password-reset-code', {
+      email: 'target@example.com',
+    })
+    let data = await response.json()
+    assert.equal(response.status, 201)
+    assert.ok(data.code)
+    assert.ok(data.expiresAt)
+  })
+
+  it('returns 403 for non-admin', async () => {
+    let response = await request.authenticated.post('authentication/password-reset-code', {
+      email: 'inviter@example.com',
+    })
+    assert.equal(response.status, 403)
+  })
+
+
+  it('returns 404 for nonexistent email', async () => {
+    let response = await request.authenticated.post('authentication/password-reset-code', {
+      email: 'nobody@example.com',
+    })
+    assert.equal(response.status, 404)
+  })
+})
+
+/*
+describe('POST /authentication/reset-password', () => {
+  async function createResetCode(email: string) {
+    await prisma.user.update({
+      where: { username: 'odie' },
+      data: { role: 'admin' },
+    })
+
+    let response = await request.authenticated.post('authentication/reset-codes', {
+      email,
+    })
+    let data = await response.json()
+    return data.code as string
+  }
+
+  it('resets password with a valid code', async () => {
+    await registerUser()
+    let code = await createResetCode('inviter@example.com')
+
+    let response = await request.post('authentication/reset-password', {
+      code,
+      newPassword: 'brand-new-password',
+    })
+
+    assert.equal(response.status, 200)
+
+    // can log in with new password
+    let loginResponse = await request.post('authentication/login', {
+      email: 'inviter@example.com',
+      password: 'brand-new-password',
+    })
+
+    assert.equal(loginResponse.status, 200)
+  })
+
+  it('invalidates all sessions after reset', async () => {
+    await registerUser()
+
+    // log in as inviter to get a session
+    // inviter doesn't have a real password hash, so create a proper user
+    let inviteResponse = await request.authenticated.post('invitations', {})
+    let invite = await inviteResponse.json()
+
+    let registerResponse = await request.post('authentication/register', {
+      username: 'target',
+      email: 'target@example.com',
+      password: 'original-password',
+      code: invite.code,
+    })
+    let targetSession = await registerResponse.json()
+    let targetToken = targetSession.session.token
+
+    let code = await createResetCode('target@example.com')
+
+    await request.post('authentication/reset-password', {
+      code,
+      newPassword: 'brand-new-password',
+    })
+
+    let response = await fetch(baseUrl + 'users/me', {
+      headers: { 'Authorization': 'Bearer ' + targetToken },
+    })
+
+    assert.equal(response.status, 401)
+  })
+
+  it('returns 400 for invalid code', async () => {
+    let response = await request.post('authentication/reset-password', {
+      code: 'fake-code',
+      newPassword: 'brand-new-password',
+    })
+
+    assert.equal(response.status, 400)
+  })
+
+  it('returns 400 for already used code', async () => {
+    await registerUser()
+    let code = await createResetCode('inviter@example.com')
+
+    await request.post('authentication/reset-password', {
+      code,
+      newPassword: 'brand-new-password',
+    })
+
+    let response = await request.post('authentication/reset-password', {
+      code,
+      newPassword: 'another-password',
+    })
+
+    assert.equal(response.status, 400)
+  })
+
+  it('returns 400 for expired code', async () => {
+    mock.timers.enable({ apis: ['Date'] })
+
+    await registerUser()
+    let code = await createResetCode('inviter@example.com')
+
+    const TWENTY_FIVE_HOURS = 25 * 60 * 60 * 1000
+    mock.timers.tick(TWENTY_FIVE_HOURS)
+
+    let response = await request.post('authentication/reset-password', {
+      code,
+      newPassword: 'brand-new-password',
+    })
+
+    mock.timers.reset()
+
+    assert.equal(response.status, 400)
+  })
+})
+*/

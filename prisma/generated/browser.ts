@@ -38,6 +38,11 @@ export type Session = Prisma.SessionModel
  */
 export type Invitation = Prisma.InvitationModel
 /**
+ * Model PasswordResetCode
+ * 
+ */
+export type PasswordResetCode = Prisma.PasswordResetCodeModel
+/**
  * Model Post
  * 
  */

@@ -61,7 +61,6 @@ export default {
     let session = await Authentication.createSession(user.id)
     return response.status(200).json({session, user})
   },
-
   // someone could POST garbage to the logout endpoint 
   // so to prevent the controller from trying to delete a nonexistent session
   // we'll check to see that the token is valid
@@ -79,7 +78,6 @@ export default {
     await Authentication.deleteSession(token)
     return response.status(200).json({ ok: true })
   },
-
   async changePassword(request:Request, response:Response) {
     let result = await validate(schemas.passwordChange, request.body)
     if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
@@ -90,6 +88,27 @@ export default {
     if (outcome.error == 'wrong password') return response.status(401).json({ error: 'Current password is incorrect' })
 
     await Authentication.deleteOtherSessions(request.user!.id, request.sessionToken!)
+
+    return response.status(200).json({ ok: true })
+  },
+  async createResetCode(request:Request, response:Response) {
+    if (request.user!.role != 'admin') return response.status(403).json({ error: 'Forbidden' })
+
+    let result = await validate(schemas.createResetCode, request.body)
+    if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
+
+    let resetCode = await Authentication.createResetCode(result.value.email)
+    if (!resetCode) return response.status(404).json({ error: 'User not found' })
+
+    return response.status(201).json(resetCode)
+  },
+  async resetPassword(request: Request, response: Response) {
+    let result = await validate(schemas.resetPassword, request.body)
+    if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
+
+    let { code, newPassword } = result.value
+    let outcome = await Authentication.resetPassword(code, newPassword)
+    if(outcome.error) return response.status(outcome.error.status).json({ error: outcome.error.message })
 
     return response.status(200).json({ ok: true })
   }

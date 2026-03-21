@@ -1,6 +1,7 @@
 import { describe, it, before, beforeEach, after } from 'node:test'
 import assert from 'node:assert/strict'
-import { startServer, stopServer, cleanup, request, createTestImage } from '#test'
+import { startServer, stopServer, cleanup, request, createTestImage, createAdditionalUser, baseUrl } from '#test'
+import prisma from '#prisma'
 
 before(startServer)
 beforeEach(cleanup)
@@ -146,5 +147,26 @@ describe('DELETE /posts/:id', () => {
   it('returns 401 without a token', async () => {
     let response = await request.delete('posts/some-id')
     assert.equal(response.status, 401)
+  })
+
+  it('allows admin to delete any post', async () => {
+    let image = await createTestImage()
+    let created = await request.authenticated.uploadImage('posts', image, 'photo.png')
+    let post = await created.json()
+
+    let adminToken = await createAdditionalUser('admin', 'admin@example.com')
+
+    // promote to admin directly in database
+    await prisma.user.update({
+      where: { username: 'admin' },
+      data: { role: 'admin' },
+    })
+
+    let response = await fetch(baseUrl + 'posts/' + post.id, {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + adminToken },
+    })
+
+    assert.equal(response.status, 200)
   })
 })

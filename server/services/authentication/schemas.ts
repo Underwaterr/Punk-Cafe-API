@@ -4,19 +4,28 @@ import vine from '@vinejs/vine'
 // no spaces, no uppercase, no special characters
 let validUsernameRegex = /^[a-z0-9-]+$/
 
+let getPasswordRules = ()=> vine.string().minLength(12).maxLength(128).clone()
+
 export default {
   registration: vine.object({
     username: vine.string().minLength(1).maxLength(32).regex(validUsernameRegex), 
     email: vine.string().email(),
-    password: vine.string().minLength(12).maxLength(128),
+    password: getPasswordRules(),
     code: vine.string()
   }),
   login: vine.object({
     email: vine.string().email(),
-    password: vine.string()
+    password: vine.string() // don't enforce in case the password rules change
   }),
   passwordChange: vine.object({
-    currentPassword: vine.string(),
-    newPassword: vine.string().minLength(12).maxLength(128),
+    currentPassword: vine.string(), // don't enforce in case the password rules change
+    newPassword: getPasswordRules()
+  }),
+  createResetCode: vine.object({
+    email: vine.string().email(),
+  }),
+  resetPassword: vine.object({
+    code: vine.string(),
+    newPassword:getPasswordRules()
   })
 }

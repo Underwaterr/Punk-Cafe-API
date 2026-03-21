@@ -1,5 +1,5 @@
 import prisma from '#prisma'
-import generateCode from './generate-code.ts'
+import generateCode from '#server/generate-code.ts'
 
 export default {
   create(invitedBy:string) {

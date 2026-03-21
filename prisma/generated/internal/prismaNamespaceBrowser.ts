@@ -55,6 +55,7 @@ export const ModelName = {
   UserAuthentication: 'UserAuthentication',
   Session: 'Session',
   Invitation: 'Invitation',
+  PasswordResetCode: 'PasswordResetCode',
   Post: 'Post',
   PostImage: 'PostImage'
 } as const
@@ -128,6 +129,18 @@ export const InvitationScalarFieldEnum = {
 } as const
 
 export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
+
+
+export const PasswordResetCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  userId: 'userId',
+  usedAt: 'usedAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetCodeScalarFieldEnum = (typeof PasswordResetCodeScalarFieldEnum)[keyof typeof PasswordResetCodeScalarFieldEnum]
 
 
 export const PostScalarFieldEnum = {

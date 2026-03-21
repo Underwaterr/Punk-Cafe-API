@@ -15,7 +15,8 @@
   "imports": {
     "#prisma": "./server/database.ts",
     "#test": "./test-utilities.ts",
-    "#validator": "./server/validator.ts"
+    "#validator": "./server/validator.ts",
+    "#server/*": "./server/*"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",

@@ -388,6 +388,7 @@ export const ModelName = {
   UserAuthentication: 'UserAuthentication',
   Session: 'Session',
   Invitation: 'Invitation',
+  PasswordResetCode: 'PasswordResetCode',
   Post: 'Post',
   PostImage: 'PostImage'
 } as const
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userAuthentication" | "session" | "invitation" | "post" | "postImage"
+    modelProps: "user" | "userAuthentication" | "session" | "invitation" | "passwordResetCode" | "post" | "postImage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -705,6 +706,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PasswordResetCode: {
+      payload: Prisma.$PasswordResetCodePayload<ExtArgs>
+      fields: Prisma.PasswordResetCodeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PasswordResetCodeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetCodePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PasswordResetCodeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetCodePayload>
+        }
+        findFirst: {
+          args: Prisma.PasswordResetCodeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetCodePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PasswordResetCodeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetCodePayload>
+        }
+        findMany: {
+          args: Prisma.PasswordResetCodeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetCodePayload>[]
+        }
+        create: {
+          args: Prisma.PasswordResetCodeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetCodePayload>
+        }
+        createMany: {
+          args: Prisma.PasswordResetCodeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PasswordResetCodeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetCodePayload>[]
+        }
+        delete: {
+          args: Prisma.PasswordResetCodeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetCodePayload>
+        }
+        update: {
+          args: Prisma.PasswordResetCodeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetCodePayload>
+        }
+        deleteMany: {
+          args: Prisma.PasswordResetCodeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PasswordResetCodeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PasswordResetCodeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetCodePayload>[]
+        }
+        upsert: {
+          args: Prisma.PasswordResetCodeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetCodePayload>
+        }
+        aggregate: {
+          args: Prisma.PasswordResetCodeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePasswordResetCode>
+        }
+        groupBy: {
+          args: Prisma.PasswordResetCodeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PasswordResetCodeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PasswordResetCodeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PasswordResetCodeCountAggregateOutputType> | number
+        }
+      }
+    }
     Post: {
       payload: Prisma.$PostPayload<ExtArgs>
       fields: Prisma.PostFieldRefs
@@ -947,6 +1022,18 @@ export const InvitationScalarFieldEnum = {
 export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
 
 
+export const PasswordResetCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  userId: 'userId',
+  usedAt: 'usedAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetCodeScalarFieldEnum = (typeof PasswordResetCodeScalarFieldEnum)[keyof typeof PasswordResetCodeScalarFieldEnum]
+
+
 export const PostScalarFieldEnum = {
   id: 'id',
   authorId: 'authorId',
@@ -1156,6 +1243,7 @@ export type GlobalOmitConfig = {
   userAuthentication?: Prisma.UserAuthenticationOmit
   session?: Prisma.SessionOmit
   invitation?: Prisma.InvitationOmit
+  passwordResetCode?: Prisma.PasswordResetCodeOmit
   post?: Prisma.PostOmit
   postImage?: Prisma.PostImageOmit
 }

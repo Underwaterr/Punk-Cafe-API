@@ -1,6 +1,8 @@
 import prisma from '#prisma'
 import argon2 from 'argon2'
-import generateToken from './generate-token.ts'
+import generateCode from '#server/generate-code.ts'
+import generateToken from '#server/token-generator.ts'
+import { ResetPasswordError } from './errors.ts'
 
 // speed up argon2 hashing when testing
 let hashOptions = (process.env.NODE_ENV == 'test')
@@ -44,7 +46,8 @@ export default {
   },
   createSession(userId:string) {
     let token = generateToken()
-    let expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days 
+    const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000
+    let expiresAt = new Date(Date.now() + THIRTY_DAYS)
     let data = { token, userId, expiresAt }
     return prisma.session.create({ data })
   },
@@ -83,6 +86,9 @@ export default {
       },
     })
   },
+
+  // You are logged in and want to change your password
+  // This logs you out of all other sessions
   async changePassword(userId:string, currentPassword:string, newPassword:string) {
     let user = await prisma.user.findUnique({
       where: { id: userId },
@@ -105,5 +111,71 @@ export default {
     })
 
     return { error: null }
+  },
+
+  // You are not logged in and you forgot your password
+  // requires a code given to the user from the admin
+  async resetPassword(code: string, newPassword: string) {
+    let resetCode = await prisma.passwordResetCode.findUnique({ 
+      where: {code} 
+    })
+
+    if (!resetCode) return { error: ResetPasswordError.INVALID_CODE }
+    if (resetCode.usedAt) return { error: ResetPasswordError.CODE_USED }
+    if (resetCode.expiresAt < new Date()) return { error: ResetPasswordError.CODE_EXPIRED }
+
+    let passwordHash = await argon2.hash(newPassword, hashOptions)
+
+    await prisma.$transaction(async tx=> {
+      await tx.userAuthentication.update({
+        where: { userId: resetCode.userId },
+        data: {
+          passwordHash,
+          passwordChangedAt: new Date(),
+          failedAttempts: 0,
+          lockedUntil: null,
+        },
+      })
+
+      await tx.passwordResetCode.update({
+        where: { code },
+        data: { usedAt: new Date() },
+      })
+
+      await tx.session.deleteMany({
+        where: { userId: resetCode.userId },
+      })
+    })
+
+    return { error: null }
+  },
+  async createResetCode(email: string) {
+    let user = await prisma.user.findUnique({ 
+      where: { email } 
+    })
+
+    if (!user) return null
+
+    const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000
+    let expiresAt = new Date(Date.now() + TWENTY_FOUR_HOURS)
+
+    return prisma.$transaction(async tx=> {
+      let code: string
+      let attempts = 0
+
+      // keep generating password reset codes until we get one that is unique
+      while (true) {
+        code = generateCode()
+        let existing = await tx.passwordResetCode.findUnique({ where: { code } })
+        if (!existing) break
+        attempts++
+        // attempt up to ten times to avoid bugs that lead to an infinite loop!
+        if (attempts >= 10) throw new Error('Failed to generate unique reset code')
+      }
+
+      return tx.passwordResetCode.create({
+        data: { code, userId: user.id, expiresAt },
+      })
+    })
   }
 }

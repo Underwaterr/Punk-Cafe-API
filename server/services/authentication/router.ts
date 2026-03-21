@@ -8,5 +8,7 @@ router.post('/register', controller.register)
 router.post('/login', controller.login)
 router.post('/logout', controller.logout)
 router.put('/password', guard, controller.changePassword)
+router.post('/reset-password', controller.resetPassword)
+router.post('/password-reset-code', guard, controller.createResetCode)
 
 export default router

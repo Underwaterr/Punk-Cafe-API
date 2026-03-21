@@ -14,7 +14,10 @@
      "erasableSyntaxOnly": true,
 
      // require `import type` for importing types
-     "verbatimModuleSyntax": true
+     "verbatimModuleSyntax": true,
 
-  }
+     "paths": { 
+       "#server/*": ["./server/*"]
+      }
+   }
 }

@@ -131,3 +131,31 @@ async function getSessionToken() {
   cachedToken = data.session.token as string
   return cachedToken
 }
+
+export async function createAdditionalUser(username:string, email:string) {
+  let mainToken = await getSessionToken()
+
+  // create an invitation from the main user
+  let inviteResponse = await fetch(baseUrl + 'invitations', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + mainToken },
+  })
+  let invite = await inviteResponse.json()
+
+  // register the new user
+  let registerResponse = await fetch(baseUrl + 'authentication/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      username,
+      email,
+      password: 'test-password-123',
+      code: invite.code,
+    }),
+  })
+
+  let data = await registerResponse.json()
+  return data.session.token as string
+}
+
+export { baseUrl }
