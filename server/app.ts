@@ -1,6 +1,7 @@
 import express from 'express'
 import type { Request, Response, NextFunction } from 'express'
 import guard from './guard.ts'
+import logger from './logger.ts'
 import entitiesRouter from './entities/router.ts'
 import servicesRouter from './services/router.ts'
 
@@ -14,6 +15,9 @@ app.use(express.json())
 
 // Parse URL query strings
 app.use(express.urlencoded({extended: true}))
+
+// log routes
+if (process.env.NODE_ENV != 'test') app.use(logger)
 
 // These routes are public
 app.get('/', (_, response)=> { response.json({ok: true}) })
