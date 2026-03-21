@@ -23,8 +23,7 @@ export async function stopServer() {
   await prisma.$disconnect()
 }
 
-// TODO: rename function
-export async function resetDatabase() {
+export async function cleanup() {
   cachedToken = null
   let resetDatabaseQuery = `TRUNCATE users, user_authentication, sessions, invitations, posts, post_images CASCADE`
   await prisma.$executeRawUnsafe(resetDatabaseQuery)
