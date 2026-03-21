@@ -48,6 +48,12 @@ export let request = {
     let body = JSON.stringify(data)
     return await fetch(baseUrl + endpoint, { method, headers, body })
   },
+  async put(endpoint: string, data: Record<string, unknown>) {
+    let method = 'PUT'
+    let headers = { 'Content-Type': 'application/json' }
+    let body = JSON.stringify(data)
+    return await fetch(baseUrl + endpoint, { method, headers, body })
+  },
   async delete(endpoint:string) {
     let method = 'DELETE'
     return await fetch(baseUrl + endpoint, { method })
@@ -64,6 +70,16 @@ export let request = {
       let headers = { 
         'Authorization': 'Bearer ' + token,
         'Content-Type': 'application/json'
+      }
+      let body = JSON.stringify(data)
+      return await fetch(baseUrl + endpoint, { method, headers, body })
+    },
+    async put(endpoint:string, data: Record<string, unknown>) {
+      let token = await getSessionToken()
+      let method = 'PUT'
+      let headers = {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json',
       }
       let body = JSON.stringify(data)
       return await fetch(baseUrl + endpoint, { method, headers, body })

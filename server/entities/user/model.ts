@@ -1,7 +1,15 @@
 import prisma from '#prisma'
 import { deleteAvatar, deleteImages } from '../../image-process.ts'
 
-let select = { id: true, username: true, displayName: true, avatarPath: true, createdAt: true } as const
+let select = { 
+  id: true, 
+  username: true,
+  displayName: true,
+  avatarPath: true,
+  createdAt: true,
+  pronouns: true,
+  bio: true
+} as const
 
 export default {
   getAll() { 
@@ -22,6 +30,14 @@ export default {
     return prisma.user.update({
       where: { id },
       data: { avatarPath },
+      select,
+    })
+  },
+
+  updateProfile(id:string, data: { displayName?:string, pronouns?:string, bio?:string }) {
+    return prisma.user.update({
+      where: { id },
+      data,
       select,
     })
   },

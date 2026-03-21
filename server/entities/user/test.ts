@@ -106,6 +106,58 @@ describe('POST /users/me/avatar', () => {
   })
 })
 
+describe('PUT /users/me', () => {
+  it('updates display name', async () => {
+    let response = await request.authenticated.put('users/me', { displayName: 'Odie the Dog' })
+    let data = await response.json()
+
+    assert.equal(response.status, 200)
+    assert.equal(data.displayName, 'Odie the Dog')
+  })
+
+  it('updates pronouns', async () => {
+    let response = await request.authenticated.put('users/me', { pronouns: 'he/him' })
+    let data = await response.json()
+
+    assert.equal(response.status, 200)
+    assert.equal(data.pronouns, 'he/him')
+  })
+
+  it('updates bio', async () => {
+    let response = await request.authenticated.put('users/me', { bio: "I have no idea what's going on" })
+    let data = await response.json()
+
+    assert.equal(response.status, 200)
+    assert.equal(data.bio, "I have no idea what's going on")
+  })
+
+  it('updates multiple fields at once', async () => {
+    let response = await request.authenticated.put('users/me', {
+      displayName: 'Odie the Dog',
+      pronouns: 'he/him',
+      bio: "I have no idea what's going on",
+    })
+    let data = await response.json()
+
+    assert.equal(response.status, 200)
+    assert.equal(data.displayName, 'Odie the Dog')
+    assert.equal(data.pronouns, 'he/him')
+    assert.equal(data.bio, "I have no idea what's going on")
+  })
+
+  it('returns 400 for invalid input', async () => {
+    let response = await request.authenticated.put('users/me', {
+      bio: 'x'.repeat(301),
+    })
+    assert.equal(response.status, 400)
+  })
+
+  it('returns 401 without a token', async () => {
+    let response = await request.put('users/me', { displayName: 'test' })
+    assert.equal(response.status, 401)
+  })
+})
+
 describe('DELETE /users/me', () => {
   it('deletes the authenticated user', async () => {
     let response = await request.authenticated.delete('users/me')

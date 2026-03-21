@@ -14,7 +14,7 @@ export default {
   async getById(request:Request, response:Response) {
 
     // validate parameters
-    let result = await validate(schema, request.params)
+    let result = await validate(schema.parameter, request.params)
     if (result.isErr()) return response.status(400).json({error: 'Invalid user ID'})
 
     // validate database
@@ -27,6 +27,14 @@ export default {
 
   async getMe(request:Request, response:Response) {
     return response.json(request.user)
+  },
+
+  async updateProfile(request: Request, response: Response) {
+    let result = await validate(schema.profileUpdate, request.body)
+    if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
+
+    let user = await User.updateProfile(request.user!.id, result.value)
+    return response.json(user)
   },
 
   async updateAvatar(request:Request, response:Response) {
