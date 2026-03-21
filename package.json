@@ -3,8 +3,8 @@
   "scripts": {
     "start": "node index.ts",
     "dev": "node --watch index.ts",
-    "test": "node --env-file=.env.test --test --test-concurrency=1 '**/*.test.ts'",
-    "test:watch": "node --env-file=.env.test --watch --test --test-concurrency=1 '**/*.test.ts'",
+    "test": "node --env-file=.env.test --test --test-concurrency=1 '**/test.ts'",
+    "test:watch": "node --env-file=.env.test --watch --test --test-concurrency=1 '**/test.ts'",
     "db:start": "docker compose up -d",
     "db:stop": "docker compose down",
     "db:reset": "docker compose down -v",
