@@ -54,7 +54,9 @@ export const ModelName = {
   User: 'User',
   UserAuthentication: 'UserAuthentication',
   Session: 'Session',
-  Invitation: 'Invitation'
+  Invitation: 'Invitation',
+  Post: 'Post',
+  PostImage: 'PostImage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -123,6 +125,31 @@ export const InvitationScalarFieldEnum = {
 } as const
 
 export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
+
+
+export const PostScalarFieldEnum = {
+  id: 'id',
+  authorId: 'authorId',
+  caption: 'caption',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+export const PostImageScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  imagePath: 'imagePath',
+  thumbnailPath: 'thumbnailPath',
+  width: 'width',
+  height: 'height',
+  position: 'position',
+  createdAt: 'createdAt'
+} as const
+
+export type PostImageScalarFieldEnum = (typeof PostImageScalarFieldEnum)[keyof typeof PostImageScalarFieldEnum]
 
 
 export const SortOrder = {

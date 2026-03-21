@@ -1,53 +1,51 @@
 model User {
-  id          String                        @id @default(dbgenerated("uuidv7()"))
-  username    String                        @unique
+  id          String   @id @default(dbgenerated("uuidv7()"))
+  username    String   @unique
   displayName String?  @map("display_name")
-  email       String                        @unique
+  email       String   @unique
   avatarPath  String?  @map("avatar_path")
-  createdAt   DateTime @map("created_at")   @default(now()) 
-  updatedAt   DateTime @map("updated_at")   @updatedAt 
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
-  authentication     UserAuthentication?
-  sessions           Session[]
-  invitationsCreated Invitation[] @relation("invitations_created")
-  invitationsRedeemed Invitation[] @relation("invitations_redeemed")
+  authentication      UserAuthentication?
+  sessions            Session[]
+  invitationsCreated  Invitation[]        @relation("invitations_created")
+  invitationsRedeemed Invitation[]        @relation("invitations_redeemed")
+  posts               Post[]
 
   @@map("users")
 }
-
 
 // TODO:
 // move failedAttempts ad lockedUntil to Redis cache
 // passwordChangedAt is for invalidating tokens issued before a password change
 model UserAuthentication {
-  id                String                                @id @default(dbgenerated("uuidv7()"))
-  userId            String    @map("user_id")             @unique 
+  id                String    @id @default(dbgenerated("uuidv7()"))
+  userId            String    @unique @map("user_id")
   passwordHash      String    @map("password_hash")
-  failedAttempts    Int       @map("failed_attempts")     @default(0) 
+  failedAttempts    Int       @default(0) @map("failed_attempts")
   lockedUntil       DateTime? @map("locked_until")
-  passwordChangedAt DateTime  @map("password_changed_at") @default(now()) 
-  createdAt         DateTime  @map("created_at")          @default(now()) 
-  updatedAt         DateTime  @map("updated_at")          @updatedAt 
+  passwordChangedAt DateTime  @default(now()) @map("password_changed_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_authentication")
 }
 
-
 model Session {
-  id         String    @id @default(dbgenerated("uuidv7()"))
-  token      String    @unique
-  userId     String    @map("user_id")
-  lastActive DateTime  @default(now()) @map("last_active")
-  expiresAt  DateTime  @map("expires_at")
-  createdAt  DateTime  @default(now()) @map("created_at")
+  id         String   @id @default(dbgenerated("uuidv7()"))
+  token      String   @unique
+  userId     String   @map("user_id")
+  lastActive DateTime @default(now()) @map("last_active")
+  expiresAt  DateTime @map("expires_at")
+  createdAt  DateTime @default(now()) @map("created_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
-
 
 model Invitation {
   id         String    @id @default(dbgenerated("uuidv7()"))
@@ -62,6 +60,34 @@ model Invitation {
   redeemer User? @relation("invitations_redeemed", fields: [redeemedBy], references: [id], onDelete: SetNull)
 
   @@map("invitations")
+}
+
+model Post {
+  id        String   @id @default(dbgenerated("uuidv7()"))
+  authorId  String   @map("author_id")
+  caption   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  author User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  images PostImage[]
+
+  @@map("posts")
+}
+
+model PostImage {
+  id            String   @id @default(dbgenerated("uuidv7()"))
+  postId        String   @map("post_id")
+  imagePath     String   @map("image_path")
+  thumbnailPath String   @map("thumbnail_path")
+  width         Int?
+  height        Int?
+  position      Int      @default(0) @db.SmallInt
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("post_images")
 }
 
 generator client {

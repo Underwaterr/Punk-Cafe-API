@@ -1,9 +1,11 @@
 import { Router } from 'express'
 import userRouter from './user/router.ts'
 import invitationRouter from './invitation/router.ts'
+import postRouter from './post/router.ts'
 
 let router = Router()
 router.use('/users', userRouter)
 router.use('/invitations', invitationRouter)
+router.use('/posts', postRouter)
 
 export default router

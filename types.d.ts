@@ -5,7 +5,7 @@ declare global {
     interface ProcessEnv {
       PORT: string
       DATABASE_URL: string,
-      TEST_DATABASE_URL: string
+      UPLOAD_DIRECTORY: string
     }
   }
   namespace Express {

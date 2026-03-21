@@ -61,3 +61,13 @@ export type Session = Prisma.SessionModel
  * 
  */
 export type Invitation = Prisma.InvitationModel
+/**
+ * Model Post
+ * 
+ */
+export type Post = Prisma.PostModel
+/**
+ * Model PostImage
+ * 
+ */
+export type PostImage = Prisma.PostImageModel

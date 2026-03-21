@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict'
 import type { Server } from 'node:http'
+import { rm } from 'node:fs/promises'
 import app from './server/app.ts'
 import prisma from '#prisma'
+import sharp from 'sharp'
+import './env.ts'
 
 let server: Server
 let baseUrl: string
@@ -20,11 +23,12 @@ export async function stopServer() {
   await prisma.$disconnect()
 }
 
+// TODO: rename function
 export async function resetDatabase() {
   cachedToken = null
-  await prisma.$executeRawUnsafe(
-    `TRUNCATE users, user_authentication, sessions, invitations CASCADE`
-  )
+  let resetDatabaseQuery = `TRUNCATE users, user_authentication, sessions, invitations, posts, post_images CASCADE`
+  await prisma.$executeRawUnsafe(resetDatabaseQuery)
+  await rm(process.env.UPLOAD_DIRECTORY, { recursive: true, force: true })
 }
 
 export let request = {
@@ -52,6 +56,17 @@ export let request = {
       }
       let body = JSON.stringify(data)
       return await fetch(baseUrl + endpoint, { method, headers, body })
+    },
+    async uploadImage(endpoint:string, buffer:Buffer, filename:string, caption?:string) {
+      let token = await getSessionToken()
+      let form = new FormData()
+      let blob = new Blob([new Uint8Array(buffer)], { type: 'image/png' })
+      form.append('image', blob, filename)
+      if (caption) form.append('caption', caption)
+      let method = 'POST'
+      let headers = { 'Authorization': 'Bearer ' + token }
+      let body = form
+      return await fetch(baseUrl + endpoint, { method, headers, body })
     }
   }
 }
@@ -65,7 +80,7 @@ async function getSessionToken() {
       authentication: { create: { passwordHash: 'not-real' } },
     },
   })
-  let invitation = await prisma.invitation.create({
+  await prisma.invitation.create({
     data: {
       code: 'test-invite-code',
       invitedBy: inviter.id,

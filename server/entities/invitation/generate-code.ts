@@ -33,6 +33,6 @@ function pick(list: string[]) {
 export default function generateCode() {
   let adjective = pick(adjectives)
   let noun = pick(nouns)
-  let number = randomInt(100).toString().padStart(2)
+  let number = randomInt(100).toString().padStart(2, 0)
   return `${adjective}-${noun}-${number}`
 }

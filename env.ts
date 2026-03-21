@@ -11,8 +11,7 @@ try { loadEnvFile() } catch {}
 let schema = vine.object({
   PORT: vine.number().positive().min(1024).max(65535),
   DATABASE_URL: vine.string(),
-  // production does not need a test database
-  TEST_DATABASE_URL: vine.string().optional()
+  UPLOAD_DIRECTORY: vine.string()
 })
 
 try { await vine.validate({ schema, data: process.env }) }

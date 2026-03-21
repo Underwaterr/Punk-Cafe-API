@@ -3,8 +3,8 @@
   "scripts": {
     "start": "node index.ts",
     "dev": "node --watch index.ts",
-    "test": "DATABASE_URL=postgresql://punk_cafe_admin:password@localhost:5432/punk_cafe_test node --test --test-concurrency=1 '**/*.test.ts'",
-    "test:watch": "DATABASE_URL=postgresql://punk_cafe_admin:password@localhost:5432/punk_cafe_test node --watch --test --test-concurrency=1 '**/*.test.ts'",
+    "test": "node --env-file=.env.test --test --test-concurrency=1 '**/*.test.ts'",
+    "test:watch": "node --env-file=.env.test --watch --test --test-concurrency=1 '**/*.test.ts'",
     "db:start": "docker compose up -d",
     "db:stop": "docker compose down",
     "db:reset": "docker compose down -v",
@@ -23,13 +23,17 @@
     "@vinejs/vine": "^4.3.0",
     "argon2": "^0.44.0",
     "express": "^5.2.1",
+    "multer": "^2.1.1",
     "neverthrow": "^8.2.0",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/multer": "^2.1.0",
     "@types/node": "^25.5.0",
     "@types/pg": "^8.18.0",
+    "@types/sharp": "^0.31.1",
     "prisma": "^7.5.0"
   }
 }
