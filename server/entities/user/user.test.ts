@@ -28,6 +28,21 @@ describe('GET /users', ()=> {
   })
 })
 
+describe('GET /users/me', () => {
+  it('returns the authenticated user', async () => {
+    let response = await request.authenticated.get('users/me')
+    let data = await response.json()
+    assert.equal(response.status, 200)
+    assert.equal(data.username, 'odie')
+    assert.equal(data.email, 'odie@example.com')
+  })
+
+  it('returns 401 without a token', async () => {
+    let response = await request.get('users/me')
+    assert.equal(response.status, 401)
+  })
+})  
+
 describe('GET /users/:id', ()=> {
   it('returns a user by id', async ()=> {
     let user = { data: { username: 'garfield', email: 'garf@example.com' } }

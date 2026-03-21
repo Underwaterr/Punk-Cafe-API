@@ -31,7 +31,7 @@ export let request = {
   async get(endpoint:string) { 
     return await fetch(baseUrl + endpoint)
   },
-  async post(endpoint:string, data:Record<string, unknown>) { 
+  async post(endpoint:string, data:Record<string, unknown> ={}) { 
     let method = 'POST'
     let headers = { 'Content-Type': 'application/json' }
     let body = JSON.stringify(data)

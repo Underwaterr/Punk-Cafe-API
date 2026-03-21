@@ -3,8 +3,7 @@ import controller from './controller.ts'
 
 let router = Router()
 
-router.get('/', controller.getAll)
-router.get('/me', controller.getMe)
-router.get('/:id', controller.getById)
+router.post('/', controller.create)
+router.get('/mine', controller.mine)
 
 export default router

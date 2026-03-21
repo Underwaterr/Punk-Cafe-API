@@ -22,5 +22,9 @@ export default {
     if (user == null) return response.status(404).json({ error: 'User not found' })
 
     return response.json(user)
+  },
+
+  async getMe(request:Request, response:Response) {
+    return response.json(request.user)
   }
 }
