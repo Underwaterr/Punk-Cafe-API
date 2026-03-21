@@ -1,7 +1,5 @@
-import { loadEnvFile } from 'node:process'
+import './env.ts'
 import { defineConfig } from "prisma/config";
-
-loadEnvFile()
 
 export default defineConfig({
   schema: "prisma/schema.prisma",

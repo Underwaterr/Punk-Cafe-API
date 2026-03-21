@@ -11,10 +11,10 @@
 
      // no TypeScript features that require transpilation
      // (enums, namespaces, parameter properties)
-     "erasableSyntaxOnly": true
+     "erasableSyntaxOnly": true,
 
      // require `import type` for importing types
-     "verbatimModuleSyntax": true,
+     "verbatimModuleSyntax": true
 
   }
 }

@@ -25,8 +25,7 @@ export async function resetDatabase() {
   )
 }
 
-// data?:Record<string, unknown>
-export async function request(endpoint:string='', method:string='GET', body?) {
+export async function request(endpoint:string='', method:string='GET', body?:Record<string, unknown>) {
   let url = baseUrl + '/' + endpoint
   if (method == 'GET') return await fetch(url)
   else return await fetch(url, { 

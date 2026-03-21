@@ -18,7 +18,7 @@ model User {
 
 // TODO:
 // move failedAttempts ad lockedUntil to Redis cache
-// passwordChagedAt is for invalidating tokens issued before a password change
+// passwordChangedAt is for invalidating tokens issued before a password change
 model UserAuthentication {
   id                String                                @id @default(dbgenerated("uuidv7()"))
   userId            String    @map("user_id")             @unique 

@@ -12,7 +12,7 @@ export default {
   findUserByEmailWithAuth(email:string) {
     return prisma.user.findUnique({
       where: { email },
-      include: { auth: true },
+      include: { authentication: true },
     })
   },
   findUserByUsername(username:string) {
@@ -23,7 +23,7 @@ export default {
     return prisma.$transaction(async tx=> {
       // Create the User
       let user = await tx.user.create({
-        data: { username, email, auth: { create: { passwordHash } } }
+        data: { username, email, authentication: { create: { passwordHash } } }
       })
       // Mark invite code as used
       await tx.invitation.update({
@@ -42,7 +42,7 @@ export default {
     let data = { token, userId, expiresAt }
     return prisma.session.create({ data })
   },
-  incrementFailedAttempts(id:string, lockUntil?:Date) {
+  incrementFailedAttempts(id:string, lockUntil:Date|null=null) { 
     return prisma.userAuthentication.update({
       where: { id },
       data: {

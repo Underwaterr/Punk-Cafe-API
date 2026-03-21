@@ -41,6 +41,7 @@ export default {
     // Confirm user Exists
     let user = await Authentication.findUserByEmailWithAuth(email)
     if (!user) return response.status(401).json({ error: 'Invalid email or password' })
+    if (!user.authentication) return response.status(401).json({ error: 'Missing authentication' })
 
     // Confirm user is not locked out
     let userIsLockedOut = (user.authentication.lockedUntil && user.authentication.lockedUntil > new Date()) 
@@ -50,13 +51,13 @@ export default {
     let validPassword = await argon2.verify(user.authentication.passwordHash, password)
     if (!validPassword) {
       let attempts = user.authentication.failedAttempts + 1
-      let lockUntil = attempts >= 5 ? new Date(Date.now() + 15 * 60 * 1000) : undefined
+      let lockUntil = attempts >= 5 ? new Date(Date.now() + 15 * 60 * 1000) : null 
       await Authentication.incrementFailedAttempts(user.authentication.id, lockUntil)
       return response.status(401).json({ error: 'Invalid email or password' })
     }
 
     // Valid login!! 
-    await Authentication.resetFailedAttempts(user.auth.id)
+    await Authentication.resetFailedAttempts(user.authentication.id)
     let session = await Authentication.createSession(user.id)
     return response.status(200).json({session, user})
   }
