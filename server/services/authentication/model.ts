@@ -48,6 +48,9 @@ export default {
       include: { user: true },
     })
   },
+  deleteSession(token:string) {
+    return prisma.session.delete({ where: {token} })
+  },
   incrementFailedAttempts(id:string, lockUntil:Date|null=null) { 
     return prisma.userAuthentication.update({
       where: { id },

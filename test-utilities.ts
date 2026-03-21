@@ -43,7 +43,7 @@ export let request = {
       let headers = { 'Authorization': 'Bearer ' + token }
       return await fetch(baseUrl + endpoint, { headers })
     },
-    async post(endpoint:string, data:Record<string, unknown>) {
+    async post(endpoint:string, data:Record<string, unknown> ={}) {
       let token = await getSessionToken()
       let method = 'POST'
       let headers = { 

@@ -233,3 +233,19 @@ describe('POST /authentication/login', ()=> {
   })
     
 })
+
+describe('POST /authentication/logout', () => {
+  it('invalidates the session', async () => {
+    let response = await request.authenticated.post('authentication/logout')
+    assert.equal(response.status, 200)
+
+    let second = await request.authenticated.get('users')
+    assert.equal(second.status, 401)
+  })
+
+  it('returns 401 without a token', async () => {
+    let response = await request.post('authentication/logout')
+    assert.equal(response.status, 401)
+  })
+})
+

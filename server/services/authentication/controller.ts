@@ -60,5 +60,23 @@ export default {
     await Authentication.resetFailedAttempts(user.authentication.id)
     let session = await Authentication.createSession(user.id)
     return response.status(200).json({session, user})
+  },
+
+  // someone could POST garbage to the logout endpoint 
+  // so to prevent the controller from trying to delete a nonexistent session
+  // we'll check to see that the token is valid
+  async logout(request:Request, response:Response) {
+    // Check for token
+    let header = request.headers.authorization
+    if (!header?.startsWith('Bearer ')) return response.status(401).json({ error: 'Missing token' })
+
+    // Confirm token
+    let token = header!.slice(7)
+    let session = await Authentication.findSession(token)
+    if (!session) return response.status(401).json({ error: 'Invalid token' })
+
+    // Valid session token, log out!
+    await Authentication.deleteSession(token)
+    return response.status(200).json({ ok: true })
   }
 }
