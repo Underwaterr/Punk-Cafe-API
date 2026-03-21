@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict'
 import type { Server } from 'node:http'
-import { rm } from 'node:fs/promises'
+import { rm, mkdir } from 'node:fs/promises'
 import argon2 from 'argon2'
 import generateToken from './server/token-generator.ts'
 import app from './server/app.ts'
 import prisma from '#prisma'
 import sharp from 'sharp'
+import request from '#request'
 
 let server: Server
 let baseUrl: string
@@ -16,6 +17,12 @@ export async function createTestImage() {
   let redSquare = { width:800, height:800, channels:3, background:'red' } as const
   cachedImage = await sharp({ create: redSquare }).png().toBuffer()
   return cachedImage
+}
+
+export async function createPost(token:string) {
+  let image = await createTestImage()
+  let response = await request.withToken(token).uploadImage('posts', image, 'photo.png')
+  return await response.json()
 }
 
 export function startServer() {
@@ -32,9 +39,10 @@ export async function stopServer() {
 }
 
 export async function cleanup() {
-  let resetDatabaseQuery = `TRUNCATE users, user_authentication, sessions, invitations, posts, post_images CASCADE`
-  await prisma.$executeRawUnsafe(resetDatabaseQuery)
+  let resetDatabaseQuery = `TRUNCATE users, user_authentication, sessions, invitations, posts, post_images, password_reset_codes, likes, comments CASCADE`
+  await prisma.$executeRawUnsafe(resetDatabaseQuery),
   await rm(process.env.UPLOAD_DIRECTORY, { recursive: true, force: true })
+  await mkdir(process.env.UPLOAD_DIRECTORY, { recursive: true })
 }
 
 export { baseUrl }

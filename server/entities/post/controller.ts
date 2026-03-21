@@ -14,19 +14,27 @@ export default {
     return response.status(201).json(post)
   },
 
-  async getAll(_request: Request, response: Response) {
-    let posts = await Post.getAll()
-    return response.json(posts)
+  async getAll(request:Request, response:Response) {
+    let userId = request.user!.id
+    let posts = await Post.getAll(userId)
+    return response.json(posts.map(({likes, ...post})=> ({
+      ...post,
+      likedByMe: (likes.length > 0)
+    })))
   },
 
   async getById(request: Request, response: Response) {
     let result = await validate(schema, request.params)
     if (result.isErr()) return response.status(400).json({ error: 'Invalid post ID' })
 
-    let post = await Post.getById(result.value.id)
+    let userId = request.user!.id
+    let post = await Post.getByIdForUser(result.value.id, userId)
     if (!post) return response.status(404).json({ error: 'Post not found' })
 
-    return response.json(post)
+    return response.json({
+      ...post,
+      likedByMe: post.likes.length > 0
+    })
   },
 
   async remove(request: Request, response: Response) {

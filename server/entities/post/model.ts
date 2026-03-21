@@ -24,6 +24,12 @@ let select = {
     },
     orderBy: { position: 'asc' as const },
   },
+  _count: {
+    select: {
+      likes: true,
+      comments: true,
+    }
+  }
 } as const
 
 export default {
@@ -47,21 +53,38 @@ export default {
     })
   },
 
-  getAll() {
+  getAll(userId:string, take:number=20) {
     return prisma.post.findMany({
-      select,
+      select: {
+        ...select,
+        likes: {
+          where: { userId },
+          select: { id: true },
+        }
+      },
       orderBy: { createdAt: 'desc' },
-      take: 20
+      take
     })
   },
 
-  getById(id:string) {
+  getByIdForUser(id:string, userId:string) {
     return prisma.post.findUnique({
       where: { id },
-      select,
+      select: {
+        ...select,
+        likes: {
+          where: { userId },
+          select: { id: true },
+        }
+      }
     })
   },
-
+  getById(id:string, userId?:string) {
+    return prisma.post.findUnique({
+      where: { id },
+      select
+    })
+  },
   async remove(id:string) {
     let post = await prisma.post.findUnique({
       where: { id },

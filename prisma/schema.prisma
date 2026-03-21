@@ -16,6 +16,9 @@ model User {
   invitationsRedeemed Invitation[]        @relation("invitations_redeemed")
   passwordResetCodes  PasswordResetCode[]
   posts               Post[]
+  likes               Like[]
+  comments            Comment[]
+
 
   @@map("users")
 }
@@ -86,8 +89,11 @@ model Post {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  author User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  images PostImage[]
+  author    User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  images    PostImage[]
+  likes     Like[]
+  comments  Comment[]
+
 
   @@map("posts")
 }
@@ -105,6 +111,33 @@ model PostImage {
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@map("post_images")
+}
+
+model Comment {
+  id        String   @id @default(dbgenerated("uuidv7()"))
+  postId    String   @map("post_id")
+  authorId  String   @map("author_id")
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Like {
+  id        String   @id @default(dbgenerated("uuidv7()"))
+  postId    String   @map("post_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+  @@map("likes")
 }
 
 generator client {
