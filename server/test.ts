@@ -1,6 +1,7 @@
 import { describe, it, before, beforeEach, after } from 'node:test'
 import assert from 'node:assert/strict'
-import { startServer, stopServer, cleanup, request } from '../test-utilities.ts'
+import { startServer, stopServer, cleanup, createTestUser } from '../test-utilities.ts'
+import request from '#request'
 
 before(startServer)
 beforeEach(cleanup)
@@ -17,7 +18,8 @@ describe('GET /', ()=> {
 
 describe('GET /secret', ()=> {
   it('returns ok', async ()=> {
-    let response = await request.authenticated.get('secret')
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let response = await request.withToken(token).get('secret')
     let data = await response.json()
     assert.equal(response.status, 200)
     assert.deepEqual(data, { ok: true })

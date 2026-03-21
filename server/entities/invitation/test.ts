@@ -1,6 +1,7 @@
 import { describe, it, before, beforeEach, after } from 'node:test'
 import assert from 'node:assert/strict'
-import { startServer, stopServer, cleanup, request } from '#test'
+import { startServer, stopServer, cleanup, createTestUser } from '#test'
+import request from '#request'
 
 before(startServer)
 beforeEach(cleanup)
@@ -8,7 +9,8 @@ after(stopServer)
 
 describe('POST /invitations', ()=> {
   it('creates an invitation with a generated code', async ()=> {
-    let response = await request.authenticated.post('invitations')
+    let { token } = await createTestUser('Garfield', 'garf@example.com')
+    let response = await request.withToken(token).post('invitations')
     let data = await response.json()
 
     assert.equal(response.status, 201)
@@ -27,10 +29,11 @@ describe('POST /invitations', ()=> {
 
 describe('GET /invitations/mine', ()=> {
   it('returns the current users invitations', async ()=> {
-    await request.authenticated.post('invitations')
-    await request.authenticated.post('invitations')
+    let { token } = await createTestUser('Garfield', 'garf@example.com')
+    await request.withToken(token).post('invitations')
+    await request.withToken(token).post('invitations')
 
-    let response = await request.authenticated.get('invitations/mine')
+    let response = await request.withToken(token).get('invitations/mine')
     let data = await response.json()
 
     assert.equal(response.status, 200)
@@ -38,7 +41,8 @@ describe('GET /invitations/mine', ()=> {
   })
 
   it('does not include other users invitations', async ()=> {
-    let response = await request.authenticated.get('invitations/mine')
+    let { token } = await createTestUser('Garfield', 'garf@example.com')
+    let response = await request.withToken(token).get('invitations/mine')
     let data = await response.json()
 
     assert.equal(response.status, 200)

@@ -15,6 +15,7 @@
   "imports": {
     "#prisma": "./server/database.ts",
     "#test": "./test-utilities.ts",
+    "#request": "./request.ts",
     "#validator": "./server/validator.ts",
     "#server/*": "./server/*"
   },
