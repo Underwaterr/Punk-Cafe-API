@@ -53,17 +53,48 @@ export default {
     })
   },
 
-  getAll(userId:string, take:number=20) {
+  getFeed(userId:string, take:number=20, cursor?:string) {
     return prisma.post.findMany({
       select: {
-        ...select,
+        id: true,
+        caption: true,
+        createdAt: true,
+        author: {
+          select: {
+            id: true,
+            username: true,
+            displayName: true,
+            avatarPath: true,
+          },
+        },
+        images: {
+          select: {
+            id: true,
+            imagePath: true,
+            thumbnailPath: true,
+            width: true,
+            height: true,
+            position: true,
+          },
+          orderBy: { position: 'asc' as const },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comments: true,
+          }
+        },
         likes: {
           where: { userId },
           select: { id: true },
-        }
+        },
       },
       orderBy: { createdAt: 'desc' },
-      take
+      take,
+      ...(cursor && {
+        cursor: { id: cursor },
+        skip: 1,
+      }),
     })
   },
 
@@ -71,7 +102,34 @@ export default {
     return prisma.post.findUnique({
       where: { id },
       select: {
-        ...select,
+        id: true,
+        caption: true,
+        createdAt: true,
+        author: {
+          select: {
+            id: true,
+            username: true,
+            displayName: true,
+            avatarPath: true,
+          },
+        },
+        images: {
+          select: {
+            id: true,
+            imagePath: true,
+            thumbnailPath: true,
+            width: true,
+            height: true,
+            position: true,
+          },
+          orderBy: { position: 'asc' as const },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comments: true,
+          }
+        },
         likes: {
           where: { userId },
           select: { id: true },
@@ -79,7 +137,7 @@ export default {
       }
     })
   },
-  getById(id:string, userId?:string) {
+  getById(id:string ) {
     return prisma.post.findUnique({
       where: { id },
       select

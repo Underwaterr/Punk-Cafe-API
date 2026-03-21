@@ -2,6 +2,7 @@ import { describe, it, before, beforeEach, after } from 'node:test'
 import assert from 'node:assert/strict'
 import { startServer, stopServer, cleanup, createTestImage, createTestUser } from '#test'
 import request from '#request'
+import prisma from '#prisma'
 
 before(startServer)
 beforeEach(cleanup)
@@ -41,7 +42,7 @@ describe('POST /posts', () => {
 
   it('returns 400 without an image', async () => {
     let { token } = await createTestUser('garfield', 'garf@example.com')
-    let response = await request.withToken(token).post('posts', {})
+    let response = await request.withToken(token).post('posts')
     assert.equal(response.status, 400)
   })
 
@@ -62,16 +63,74 @@ describe('GET /posts', () => {
     await request.withToken(token).uploadImage('posts', image, 'second.png', 'second')
 
     let response = await request.withToken(token).get('posts')
-    let data = await response.json()
+    let { posts } = await response.json()
 
-    assert.equal(data.length, 2)
-    assert.equal(data[0].caption, 'second')
-    assert.equal(data[1].caption, 'first')
+    assert.equal(posts.length, 2)
+    assert.equal(posts[0].caption, 'second')
+    assert.equal(posts[1].caption, 'first')
   })
 
   it('returns 401 without a token', async () => {
     let response = await request.get('posts')
     assert.equal(response.status, 401)
+  })
+  
+  it('returns nextCursor when more posts exist', async () => {
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let image = await createTestImage()
+
+    for (let i = 0; i < 21; i++) {
+      await request.withToken(token).uploadImage('posts', image, `photo-${i}.png`, `post ${i}`)
+    }
+
+    let response = await request.withToken(token).get('posts')
+    let data = await response.json()
+
+    assert.equal(data.posts.length, 20)
+    assert.ok(data.nextCursor)
+  })
+
+  it('returns null nextCursor when no more posts', async () => {
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let image = await createTestImage()
+    await request.withToken(token).uploadImage('posts', image, 'photo.png', 'hello')
+
+    let response = await request.withToken(token).get('posts')
+    let data = await response.json()
+
+    assert.equal(data.posts.length, 1)
+    assert.equal(data.nextCursor, null)
+  })
+
+  it('paginates with cursor', async () => {
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let image = await createTestImage()
+
+    for (let i = 0; i < 5; i++) {
+      await request.withToken(token).uploadImage('posts', image, `photo-${i}.png`, `post ${i}`)
+    }
+
+    let first = await request.withToken(token).get('posts?take=3')
+    let firstData = await first.json()
+    assert.equal(firstData.posts.length, 3)
+
+    let second = await request.withToken(token).get(`posts?take=3&cursor=${firstData.nextCursor}`)
+    let secondData = await second.json()
+    assert.equal(secondData.posts.length, 2)
+    assert.equal(secondData.nextCursor, null)
+  })
+
+  it('includes likedByMe', async () => {
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let image = await createTestImage()
+    let created = await request.withToken(token).uploadImage('posts', image, 'photo.png')
+    let post = await created.json()
+
+    await request.withToken(token).post(`likes/${post.id}`)
+
+    let response = await request.withToken(token).get('posts')
+    let data = await response.json()
+    assert.equal(data.posts[0].likedByMe, true)
   })
 })
 
@@ -158,27 +217,14 @@ describe('DELETE /posts/:id', () => {
     assert.equal(response.status, 401)
   })
 
-  /*
   it('allows admin to delete any post', async () => {
+    let arlene = await createTestUser('arlene', 'arlene@example.com')
+    await prisma.user.update({ where: { id: arlene.user.id }, data: { role: 'admin' } })
+    let nermal = await createTestUser('nermal', 'cutie@example.com')
     let image = await createTestImage()
-    let { token } = await createTestUser('garfield', 'garf@example.com')
-    let created = await request.withToken(token).uploadImage('posts', image, 'photo.png')
+    let created = await request.withToken(nermal.token).uploadImage('posts', image, 'photo.png')
     let post = await created.json()
-
-    let adminToken = await createAdditionalUser('admin', 'admin@example.com')
-
-    // promote to admin directly in database
-    await prisma.user.update({
-      where: { username: 'admin' },
-      data: { role: 'admin' },
-    })
-
-    let response = await fetch(baseUrl + 'posts/' + post.id, {
-      method: 'DELETE',
-      headers: { 'Authorization': 'Bearer ' + adminToken },
-    })
-
+    let response = await request.withToken(arlene.token).delete('posts/' + post.id)
     assert.equal(response.status, 200)
   })
-  */
 })

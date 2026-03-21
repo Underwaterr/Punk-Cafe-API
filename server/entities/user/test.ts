@@ -101,7 +101,7 @@ describe('POST /users/me/avatar', ()=> {
     assert.equal(response.status, 400)
   })
 
-  it('serves the uploaded avatar', async () => {
+  it('serves the uploaded avatar', async ()=> {
     let image = await createTestImage()
     let { token } = await createTestUser('garfield', 'garf@example.com')
     let uploadResponse = await request.withToken(token).uploadImage('users/me/avatar', image, 'avatar.png')
@@ -189,8 +189,8 @@ describe('DELETE /users/me', ()=> {
     await request.withToken(token).delete('users/me')
     let token2 = (await createTestUser('zombie-garfield', 'garf-zomb@example.com')).token
     let response = await request.withToken(token2).get('posts')
-    let data = await response.json()
-    assert.equal(data.length, 0)
+    let { posts } = await response.json()
+    assert.equal(posts.length, 0)
   })
 
   it('deletes post images from disk', async ()=> {

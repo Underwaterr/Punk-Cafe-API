@@ -5,7 +5,7 @@ import upload from '../../image-upload.ts'
 let router = Router()
 
 router.post('/', upload.single('image'), controller.create)
-router.get('/', controller.getAll)
+router.get('/', controller.getFeed)
 router.get('/:id', controller.getById)
 router.delete('/:id', controller.remove)
 

@@ -14,13 +14,19 @@ export default {
     return response.status(201).json(post)
   },
 
-  async getAll(request:Request, response:Response) {
+  async getFeed(request:Request, response:Response) {
+    let cursor = request.query.cursor as string | null
+    let take = Math.min(Number(request.query.take) || 20, 25) as number // limit take to 25
     let userId = request.user!.id
-    let posts = await Post.getAll(userId)
-    return response.json(posts.map(({likes, ...post})=> ({
-      ...post,
-      likedByMe: (likes.length > 0)
-    })))
+    let posts = await Post.getFeed(userId, take, cursor)
+    let nextCursor = posts.length == take ? posts[posts.length - 1].id : null
+    return response.json({
+      posts: posts.map(({likes, ...post})=> ({
+        ...post,
+        likedByMe: (likes.length > 0)
+      })),
+      nextCursor
+    })
   },
 
   async getById(request: Request, response: Response) {
