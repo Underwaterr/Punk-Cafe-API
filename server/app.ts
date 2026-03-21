@@ -23,11 +23,17 @@ app.use(guard)
 app.get('/secret', (_, response)=> { response.json({ok: true}) })
 app.use(entitiesRouter)
 
-// 404 handler — must be last
+// 404
 app.use((_request, response)=> {
   response
     .status(404)
     .json({ error: 'Not found' })
+})
+
+// Global error handler
+app.use((error:Error, _request:Request, response:Response, _next:NextFunction)=> {
+  console.error(error)
+  response.status(500).json({ error: 'Internal server error' })
 })
 
 export default app

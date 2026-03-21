@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express'
 import Authentication from './services/authentication/model.ts'
+import prisma from '#prisma'
 
 export default async function requireAuthentication(request:Request, response:Response, next:NextFunction) {
 
@@ -19,7 +20,9 @@ export default async function requireAuthentication(request:Request, response:Re
   // Check token hasn't expired
   if (session.expiresAt < new Date()) return response.status(401).json({ error: 'Token expired' })
 
-  request.user = session.user
+  // update the database (no `await`, we don't want to block the thread!)
+  prisma.session.update({ where: {token}, data: { lastActive: new Date() } })
 
+  request.user = session.user
   next()
 }
