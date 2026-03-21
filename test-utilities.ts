@@ -10,6 +10,11 @@ let server: Server
 let baseUrl: string
 let cachedToken: string | null = null
 
+export async function createTestImage() {
+  let redSquare = { width:800, height:800, channels:3, background:'red' } as const
+  return await sharp({ create: redSquare }).png().toBuffer()
+}
+
 export function startServer() {
   server = app.listen(0) // OS will assign a random available port
   let address = server.address()
@@ -40,6 +45,10 @@ export let request = {
     let body = JSON.stringify(data)
     return await fetch(baseUrl + endpoint, { method, headers, body })
   },
+  async delete(endpoint:string) {
+    let method = 'DELETE'
+    return await fetch(baseUrl + endpoint, { method })
+  },
   authenticated: {
     async get(endpoint:string) {
       let token = await getSessionToken()
@@ -55,6 +64,12 @@ export let request = {
       }
       let body = JSON.stringify(data)
       return await fetch(baseUrl + endpoint, { method, headers, body })
+    },
+    async delete(endpoint:string) {
+      let token = await getSessionToken()
+      let method = 'DELETE'
+      let headers = { 'Authorization': 'Bearer ' + token }
+      return await fetch(baseUrl + endpoint, { method, headers })
     },
     async uploadImage(endpoint:string, buffer:Buffer, filename:string, caption?:string) {
       let token = await getSessionToken()

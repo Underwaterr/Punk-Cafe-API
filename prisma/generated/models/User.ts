@@ -32,6 +32,9 @@ export type UserMinAggregateOutputType = {
   avatarPath: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  pronouns: string | null
+  bio: string | null
+  role: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -42,6 +45,9 @@ export type UserMaxAggregateOutputType = {
   avatarPath: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  pronouns: string | null
+  bio: string | null
+  role: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -52,6 +58,9 @@ export type UserCountAggregateOutputType = {
   avatarPath: number
   createdAt: number
   updatedAt: number
+  pronouns: number
+  bio: number
+  role: number
   _all: number
 }
 
@@ -64,6 +73,9 @@ export type UserMinAggregateInputType = {
   avatarPath?: true
   createdAt?: true
   updatedAt?: true
+  pronouns?: true
+  bio?: true
+  role?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -74,6 +86,9 @@ export type UserMaxAggregateInputType = {
   avatarPath?: true
   createdAt?: true
   updatedAt?: true
+  pronouns?: true
+  bio?: true
+  role?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -84,6 +99,9 @@ export type UserCountAggregateInputType = {
   avatarPath?: true
   createdAt?: true
   updatedAt?: true
+  pronouns?: true
+  bio?: true
+  role?: true
   _all?: true
 }
 
@@ -167,6 +185,9 @@ export type UserGroupByOutputType = {
   avatarPath: string | null
   createdAt: Date
   updatedAt: Date
+  pronouns: string | null
+  bio: string | null
+  role: string
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -198,6 +219,9 @@ export type UserWhereInput = {
   avatarPath?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  pronouns?: Prisma.StringNullableFilter<"User"> | string | null
+  bio?: Prisma.StringNullableFilter<"User"> | string | null
+  role?: Prisma.StringFilter<"User"> | string
   authentication?: Prisma.XOR<Prisma.UserAuthenticationNullableScalarRelationFilter, Prisma.UserAuthenticationWhereInput> | null
   sessions?: Prisma.SessionListRelationFilter
   invitationsCreated?: Prisma.InvitationListRelationFilter
@@ -213,6 +237,9 @@ export type UserOrderByWithRelationInput = {
   avatarPath?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  pronouns?: Prisma.SortOrderInput | Prisma.SortOrder
+  bio?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrder
   authentication?: Prisma.UserAuthenticationOrderByWithRelationInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   invitationsCreated?: Prisma.InvitationOrderByRelationAggregateInput
@@ -231,6 +258,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   avatarPath?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  pronouns?: Prisma.StringNullableFilter<"User"> | string | null
+  bio?: Prisma.StringNullableFilter<"User"> | string | null
+  role?: Prisma.StringFilter<"User"> | string
   authentication?: Prisma.XOR<Prisma.UserAuthenticationNullableScalarRelationFilter, Prisma.UserAuthenticationWhereInput> | null
   sessions?: Prisma.SessionListRelationFilter
   invitationsCreated?: Prisma.InvitationListRelationFilter
@@ -246,6 +276,9 @@ export type UserOrderByWithAggregationInput = {
   avatarPath?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  pronouns?: Prisma.SortOrderInput | Prisma.SortOrder
+  bio?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -262,6 +295,9 @@ export type UserScalarWhereWithAggregatesInput = {
   avatarPath?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  pronouns?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  bio?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  role?: Prisma.StringWithAggregatesFilter<"User"> | string
 }
 
 export type UserCreateInput = {
@@ -272,6 +308,9 @@ export type UserCreateInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   authentication?: Prisma.UserAuthenticationCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
@@ -287,6 +326,9 @@ export type UserUncheckedCreateInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   authentication?: Prisma.UserAuthenticationUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
@@ -302,6 +344,9 @@ export type UserUpdateInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   authentication?: Prisma.UserAuthenticationUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
@@ -317,6 +362,9 @@ export type UserUncheckedUpdateInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   authentication?: Prisma.UserAuthenticationUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
@@ -332,6 +380,9 @@ export type UserCreateManyInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
 }
 
 export type UserUpdateManyMutationInput = {
@@ -342,6 +393,9 @@ export type UserUpdateManyMutationInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -352,6 +406,9 @@ export type UserUncheckedUpdateManyInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -362,6 +419,9 @@ export type UserCountOrderByAggregateInput = {
   avatarPath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  pronouns?: Prisma.SortOrder
+  bio?: Prisma.SortOrder
+  role?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -372,6 +432,9 @@ export type UserMaxOrderByAggregateInput = {
   avatarPath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  pronouns?: Prisma.SortOrder
+  bio?: Prisma.SortOrder
+  role?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -382,6 +445,9 @@ export type UserMinOrderByAggregateInput = {
   avatarPath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  pronouns?: Prisma.SortOrder
+  bio?: Prisma.SortOrder
+  role?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -486,6 +552,9 @@ export type UserCreateWithoutAuthenticationInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
   invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
@@ -500,6 +569,9 @@ export type UserUncheckedCreateWithoutAuthenticationInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
   invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
@@ -530,6 +602,9 @@ export type UserUpdateWithoutAuthenticationInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
   invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
@@ -544,6 +619,9 @@ export type UserUncheckedUpdateWithoutAuthenticationInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
   invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
@@ -558,6 +636,9 @@ export type UserCreateWithoutSessionsInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   authentication?: Prisma.UserAuthenticationCreateNestedOneWithoutUserInput
   invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
   invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
@@ -572,6 +653,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   authentication?: Prisma.UserAuthenticationUncheckedCreateNestedOneWithoutUserInput
   invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
   invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
@@ -602,6 +686,9 @@ export type UserUpdateWithoutSessionsInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   authentication?: Prisma.UserAuthenticationUpdateOneWithoutUserNestedInput
   invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
   invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
@@ -616,6 +703,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   authentication?: Prisma.UserAuthenticationUncheckedUpdateOneWithoutUserNestedInput
   invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
   invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
@@ -630,6 +720,9 @@ export type UserCreateWithoutInvitationsCreatedInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   authentication?: Prisma.UserAuthenticationCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
@@ -644,6 +737,9 @@ export type UserUncheckedCreateWithoutInvitationsCreatedInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   authentication?: Prisma.UserAuthenticationUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
@@ -663,6 +759,9 @@ export type UserCreateWithoutInvitationsRedeemedInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   authentication?: Prisma.UserAuthenticationCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
@@ -677,6 +776,9 @@ export type UserUncheckedCreateWithoutInvitationsRedeemedInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   authentication?: Prisma.UserAuthenticationUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
@@ -707,6 +809,9 @@ export type UserUpdateWithoutInvitationsCreatedInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   authentication?: Prisma.UserAuthenticationUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
@@ -721,6 +826,9 @@ export type UserUncheckedUpdateWithoutInvitationsCreatedInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   authentication?: Prisma.UserAuthenticationUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
@@ -746,6 +854,9 @@ export type UserUpdateWithoutInvitationsRedeemedInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   authentication?: Prisma.UserAuthenticationUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
@@ -760,6 +871,9 @@ export type UserUncheckedUpdateWithoutInvitationsRedeemedInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   authentication?: Prisma.UserAuthenticationUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
@@ -774,6 +888,9 @@ export type UserCreateWithoutPostsInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   authentication?: Prisma.UserAuthenticationCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
@@ -788,6 +905,9 @@ export type UserUncheckedCreateWithoutPostsInput = {
   avatarPath?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pronouns?: string | null
+  bio?: string | null
+  role?: string
   authentication?: Prisma.UserAuthenticationUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
@@ -818,6 +938,9 @@ export type UserUpdateWithoutPostsInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   authentication?: Prisma.UserAuthenticationUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
@@ -832,6 +955,9 @@ export type UserUncheckedUpdateWithoutPostsInput = {
   avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pronouns?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   authentication?: Prisma.UserAuthenticationUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
@@ -904,6 +1030,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   avatarPath?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  pronouns?: boolean
+  bio?: boolean
+  role?: boolean
   authentication?: boolean | Prisma.User$authenticationArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   invitationsCreated?: boolean | Prisma.User$invitationsCreatedArgs<ExtArgs>
@@ -920,6 +1049,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   avatarPath?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  pronouns?: boolean
+  bio?: boolean
+  role?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -930,6 +1062,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   avatarPath?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  pronouns?: boolean
+  bio?: boolean
+  role?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -940,9 +1075,12 @@ export type UserSelectScalar = {
   avatarPath?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  pronouns?: boolean
+  bio?: boolean
+  role?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "displayName" | "email" | "avatarPath" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "displayName" | "email" | "avatarPath" | "createdAt" | "updatedAt" | "pronouns" | "bio" | "role", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   authentication?: boolean | Prisma.User$authenticationArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -971,6 +1109,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     avatarPath: string | null
     createdAt: Date
     updatedAt: Date
+    pronouns: string | null
+    bio: string | null
+    role: string
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1406,6 +1547,9 @@ export interface UserFieldRefs {
   readonly avatarPath: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly pronouns: Prisma.FieldRef<"User", 'String'>
+  readonly bio: Prisma.FieldRef<"User", 'String'>
+  readonly role: Prisma.FieldRef<"User", 'String'>
 }
     
 

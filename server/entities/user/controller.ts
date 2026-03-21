@@ -2,6 +2,7 @@ import type { Request, Response } from 'express'
 import User from './model.ts'
 import schema from './schema.ts'
 import validate from '#validator'
+import { processAvatar } from '../../image-process.ts'
 
 export default {
 
@@ -26,5 +27,14 @@ export default {
 
   async getMe(request:Request, response:Response) {
     return response.json(request.user)
+  },
+
+  async updateAvatar(request:Request, response:Response) {
+    if (!request.file) return response.status(400).json({ error: 'Image required' })
+
+    let avatarPath = await processAvatar(request.file.buffer)
+    let user = await User.updateAvatar(request.user!.id, avatarPath)
+
+    return response.json(user)
   }
 }

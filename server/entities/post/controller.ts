@@ -4,6 +4,7 @@ import validate from '#validator'
 import schema from './schema.ts'
 
 export default {
+
   async create(request:Request, response:Response) {
     if (!request.file) return response.status(400).json({ error: 'Image required' })
 
@@ -12,10 +13,12 @@ export default {
 
     return response.status(201).json(post)
   },
+
   async getAll(_request: Request, response: Response) {
     let posts = await Post.getAll()
     return response.json(posts)
   },
+
   async getById(request: Request, response: Response) {
     let result = await validate(schema, request.params)
     if (result.isErr()) return response.status(400).json({ error: 'Invalid post ID' })
@@ -25,4 +28,22 @@ export default {
 
     return response.json(post)
   },
+
+  async remove(request: Request, response: Response) {
+    // Validate request
+    let result = await validate(schema, request.params)
+    if (result.isErr()) return response.status(400).json({ error: 'Invalid post ID' })
+
+    // Check if post exists
+    let post = await Post.getById(result.value.id)
+    if (!post) return response.status(404).json({ error: 'Post not found' })
+
+    // You must either be the author or an admin to delete a post
+    let isAuthor = post.author.id == request.user!.id
+    let isAdmin = request.user!.role == 'admin'
+    if (!isAuthor && !isAdmin) return response.status(403).json({ error: 'Forbidden' })
+
+    await Post.remove(result.value.id)
+    return response.status(200).json({ ok: true })
+  }
 }

@@ -1,6 +1,6 @@
 import sharp from 'sharp'
 import path from 'node:path'
-import { mkdir } from 'node:fs/promises'
+import { mkdir, rm } from 'node:fs/promises'
 import { randomBytes } from 'node:crypto'
 
 let uploadDirectory = process.env.UPLOAD_DIRECTORY
@@ -18,7 +18,7 @@ export async function processImage(buffer: Buffer) {
   let thumbnailFilename = 'thumbnail_' + filename
 
   let postDirectory = path.join(uploadDirectory, 'posts')
-  let thumbnailDirectory = path.join(uploadDirectory, 'thumbs')
+  let thumbnailDirectory = path.join(uploadDirectory, 'thumbnails')
 
   // create the directories if they don't already exist
   await mkdir(postDirectory, { recursive: true })
@@ -51,4 +51,35 @@ export async function processImage(buffer: Buffer) {
     width: processed.width ?? null,
     height: processed.height ?? null,
   }
+}
+
+export async function processAvatar(buffer: Buffer) {
+
+  // create directory if it's not there already
+  let avatarDirectory = path.join(uploadDirectory, 'avatars')
+  await mkdir(avatarDirectory, { recursive: true })
+
+  let filename = generateFilename('.webp')
+  let avatarPath = path.join(avatarDirectory, filename)
+
+  await sharp(buffer)
+    .rotate()
+    .resize(256, 256, { fit: 'cover', position: 'center' })
+    .webp({ quality: 80 })
+    .toFile(avatarPath)
+
+  return path.join('avatars', filename)
+}
+
+export async function deleteImage(imagePath:string, thumbnailPath:string) {
+  let fullImagePath = path.resolve(uploadDirectory, imagePath)
+  let fullThumbnailPath = path.resolve(uploadDirectory, thumbnailPath)
+  await Promise.all([
+    await rm(fullImagePath, { force: true }),
+    await rm(fullThumbnailPath, { force: true })
+  ])
+}
+
+export async function deleteImages(images: { imagePath:string, thumbnailPath:string}[]) {
+  await Promise.all(images.map(i=> deleteImage(i.imagePath, i.thumbnailPath)))
 }

@@ -1,6 +1,6 @@
 import { describe, it, before, beforeEach, after } from 'node:test'
 import assert from 'node:assert/strict'
-import { startServer, stopServer, cleanup, request } from '#test'
+import { startServer, stopServer, cleanup, request, createTestImage } from '#test'
 import prisma from '#prisma'
 
 before(startServer)
@@ -73,5 +73,35 @@ describe('GET /users/:id', ()=> {
     let data = await response.json()
     assert.equal(response.status, 404)
     assert.equal(data.error, 'User not found')
+  })
+})
+
+describe('POST /users/me/avatar', () => {
+  it('uploads an avatar', async () => {
+    let image = await createTestImage()
+    let response = await request.authenticated.uploadImage('users/me/avatar', image, 'avatar.png')
+    let data = await response.json()
+    assert.equal(response.status, 200)
+    assert.ok(data.avatarPath)
+    assert.match(data.avatarPath, /^avatars\/[\w]+\.webp$/)
+  })
+
+  it('returns 400 without an image', async () => {
+    let response = await request.authenticated.post('users/me/avatar', {})
+    assert.equal(response.status, 400)
+  })
+
+  it('serves the uploaded avatar', async () => {
+    let image = await createTestImage()
+    let uploadResponse = await request.authenticated.uploadImage('users/me/avatar', image, 'avatar.png')
+    let data = await uploadResponse.json()
+    let response = await request.authenticated.get('images/' + data.avatarPath)
+    assert.equal(response.status, 200)
+    assert.equal(response.headers.get('content-type'), 'image/webp')
+  })
+
+  it('returns 401 without a token', async () => {
+    let response = await request.get('users/me/avatar')
+    assert.equal(response.status, 401)
   })
 })

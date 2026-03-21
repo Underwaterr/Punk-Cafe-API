@@ -1,5 +1,6 @@
+import path from 'node:path'
 import prisma from '#prisma'
-import { processImage } from '../../image-process.ts'
+import { processImage, deleteImages } from '../../image-process.ts'
 
 let select = {
   id: true,
@@ -27,9 +28,9 @@ let select = {
 } as const
 
 export default {
-  async create(authorId: string, caption: string | null, file: Buffer) {
-    let image = await processImage(file)
 
+  async create(authorId:string, caption:string | null, file:Buffer) {
+    let image = await processImage(file)
     return prisma.post.create({
       data: {
         authorId,
@@ -46,6 +47,7 @@ export default {
       select,
     })
   },
+
   getAll() {
     return prisma.post.findMany({
       select,
@@ -53,10 +55,22 @@ export default {
       take: 20
     })
   },
-  getById(id: string) {
+
+  getById(id:string) {
     return prisma.post.findUnique({
       where: { id },
       select,
     })
   },
+
+  async remove(id:string) {
+    let post = await prisma.post.findUnique({
+      where: { id },
+      include: { images: true },
+    })
+    if (!post) return null
+    await deleteImages(post.images)
+    await prisma.post.delete({ where: { id } })
+    return post
+  }
 }

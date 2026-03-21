@@ -6,6 +6,9 @@ model User {
   avatarPath  String?  @map("avatar_path")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
+  pronouns    String?
+  bio         String?
+  role        String   @default("user")
 
   authentication      UserAuthentication?
   sessions            Session[]
