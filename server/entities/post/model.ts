@@ -143,6 +143,13 @@ export default {
       select
     })
   },
+  updateCaption(id: string, caption: string | null) {
+    return prisma.post.update({
+      where: { id },
+      data: { caption },
+      select,
+    })
+  },
   async remove(id:string) {
     let post = await prisma.post.findUnique({
       where: { id },

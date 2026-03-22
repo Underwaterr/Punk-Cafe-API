@@ -7,6 +7,7 @@ let router = Router()
 router.post('/', upload.single('image'), controller.create)
 router.get('/', controller.getFeed)
 router.get('/:id', controller.getById)
+router.put('/:id', controller.updateCaption)
 router.delete('/:id', controller.remove)
 
 export default router

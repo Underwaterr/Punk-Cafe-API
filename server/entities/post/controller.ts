@@ -34,7 +34,7 @@ export default {
   },
 
   async getById(request: Request, response: Response) {
-    let result = await validate(schema, request.params)
+    let result = await validate(schema.params, request.params)
     if (!result.ok) return response.status(400).json({ error: 'Invalid post ID' })
 
     let userId = request.user!.id
@@ -47,9 +47,24 @@ export default {
     })
   },
 
+  async updateCaption(request: Request, response: Response) {
+    let params = await validate(schema.params, request.params)
+    if (!params.ok) return response.status(400).json({ error: 'Invalid post ID' })
+
+    let post = await Post.getById(params.value.id)
+    if (!post) return response.status(404).json({ error: 'Post not found' })
+    if (post.author.id != request.user!.id) return response.status(403).json({ error: 'Forbidden' })
+
+    let body = await validate(schema.captionUpdate, request.body)
+    if (!body.ok) return response.status(400).json({ error: 'Invalid input' })
+
+    let updated = await Post.updateCaption(params.value.id, body.value.caption)
+    return response.json(updated)
+  },
+
   async remove(request: Request, response: Response) {
     // Validate request
-    let result = await validate(schema, request.params)
+    let result = await validate(schema.params, request.params)
     if (!result.ok) return response.status(400).json({ error: 'Invalid post ID' })
 
     // Check if post exists

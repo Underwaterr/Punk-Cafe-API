@@ -176,6 +176,63 @@ describe('GET /posts/:id', () => {
   })
 })
 
+describe('PUT /posts/:id', ()=> {
+  it('updates the caption', async ()=> {
+    let image = await createTestImage()
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let created = await request.withToken(token).uploadImage('posts', image, 'photo.png', 'before')
+    let post = await created.json()
+    let response = await request.withToken(token).put('posts/' + post.id, { caption: 'after' })
+    let data = await response.json()
+    assert.equal(response.status, 200)
+    assert.equal(data.caption, 'after')
+  })
+
+  it('sets caption to null', async ()=> {
+    let image = await createTestImage()
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let created = await request.withToken(token).uploadImage('posts', image, 'photo.png', 'hello')
+    let post = await created.json()
+    let response = await request.withToken(token).put('posts/' + post.id, { caption: null })
+    let data = await response.json()
+    assert.equal(response.status, 200)
+    assert.equal(data.caption, null)
+  })
+
+  it('returns 404 for nonexistent post', async ()=> {
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let response = await request.withToken(token).put('posts/00000000-0000-0000-0000-000000000000', { caption: 'hello' })
+    assert.equal(response.status, 404)
+  })
+
+  it('returns 400 for invalid post ID', async ()=> {
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let response = await request.withToken(token).put('posts/not-a-uuid', { caption: 'hello' })
+    assert.equal(response.status, 400)
+  })
+
+  it('returns 403 if not the author', async ()=> {
+    let garfield = await createTestUser('garfield', 'garf@example.com')
+    let nermal = await createTestUser('nermal', 'cutie@example.com')
+    let image = await createTestImage()
+    let created = await request.withToken(garfield.token).uploadImage('posts', image, 'photo.png', 'mine')
+    let post = await created.json()
+    let response = await request.withToken(nermal.token).put('posts/' + post.id, { caption: 'hijacked' })
+    assert.equal(response.status, 403)
+  })
+
+  it("returns 403 for admin editing another user's post", async ()=> {
+    let arlene = await createTestUser('arlene', 'arlene@example.com')
+    await prisma.user.update({ where: { id: arlene.user.id }, data: { role: 'admin' } })
+    let nermal = await createTestUser('nermal', 'cutie@example.com')
+    let image = await createTestImage()
+    let created = await request.withToken(nermal.token).uploadImage('posts', image, 'photo.png', 'original')
+    let post = await created.json()
+    let response = await request.withToken(arlene.token).put('posts/' + post.id, { caption: 'edited' })
+    assert.equal(response.status, 403)
+  })
+})
+
 describe('DELETE /posts/:id', () => {
   it('deletes a post', async () => {
     let image = await createTestImage()
