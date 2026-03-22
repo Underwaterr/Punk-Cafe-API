@@ -75,8 +75,8 @@ export async function deleteImage(imagePath:string, thumbnailPath:string) {
   let fullImagePath = path.resolve(uploadDirectory, imagePath)
   let fullThumbnailPath = path.resolve(uploadDirectory, thumbnailPath)
   await Promise.all([
-    await rm(fullImagePath, { force: true }),
-    await rm(fullThumbnailPath, { force: true })
+    rm(fullImagePath, { force: true }),
+    rm(fullThumbnailPath, { force: true })
   ])
 }
 
