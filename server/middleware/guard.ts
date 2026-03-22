@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
-import Authentication from './services/authentication/model.ts'
+import Authentication from '#server/services/authentication/model.ts'
 import prisma from '#prisma'
 
 export default async function requireAuthentication(request:Request, response:Response, next:NextFunction) {

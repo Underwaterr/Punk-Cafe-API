@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import controller from './controller.ts'
-import guard from '../../guard.ts'
+import guard from '#server/middleware/guard.ts'
 
 let router = Router()
 

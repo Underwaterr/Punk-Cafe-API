@@ -1,7 +1,7 @@
 import prisma from '#prisma'
 import argon2 from 'argon2'
-import generateCode from '#server/generate-code.ts'
-import generateToken from '#server/token-generator.ts'
+import generateCode from '#generate-code'
+import generateToken from '#generate-token'
 import { ResetPasswordError } from './errors.ts'
 
 // speed up argon2 hashing when testing

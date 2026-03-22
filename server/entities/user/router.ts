@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import controller from './controller.ts'
-import upload from '../../image-upload.ts'
+import upload from '#upload-image'
 
 let router = Router()
 

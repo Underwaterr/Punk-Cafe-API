@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express'
 import User from './model.ts'
 import schema from './schema.ts'
-import validate from '#validator'
-import { processAvatar } from '../../image-process.ts'
+import validate from '#validate'
+import { processAvatar } from '#process-image'
 
 export default {
 

@@ -14,11 +14,15 @@
     "db:test:migrate": "DATABASE_URL=postgresql://punk_cafe_admin:password@localhost:5432/punk_cafe_test npx prisma migrate deploy"
   },
   "imports": {
-    "#prisma": "./server/database.ts",
-    "#test": "./test-utilities.ts",
-    "#request": "./request.ts",
-    "#validator": "./server/validator.ts",
-    "#server/*": "./server/*"
+    "#prisma":         "./server/database.ts",
+    "#server/*":       "./server/*",
+    "#generate-code":  "./utilities/generate-code.ts",
+    "#generate-token": "./utilities/generate-token.ts",
+    "#process-image":  "./utilities/process-image.ts",
+    "#request":        "./utilities/request.ts",
+    "#test":           "./utilities/test-utilities.ts",
+    "#upload-image":   "./utilities/upload-image.ts",
+    "#validate":       "./utilities/validate.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",
@@ -26,6 +30,7 @@
     "@vinejs/vine": "^4.3.0",
     "argon2": "^0.44.0",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.3.1",
     "multer": "^2.1.1",
     "neverthrow": "^8.2.0",
     "pg": "^8.20.0",

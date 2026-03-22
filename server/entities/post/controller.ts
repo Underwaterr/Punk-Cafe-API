@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import Post from './model.ts'
-import validate from '#validator'
+import validate from '#validate'
 import schema from './schema.ts'
 
 export default {

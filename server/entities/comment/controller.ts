@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import validate from '#validator'
+import validate from '#validate'
 import schema from './schema.ts'
 import Comment from './model.ts'
 

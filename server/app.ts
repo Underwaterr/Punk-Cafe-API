@@ -1,7 +1,8 @@
 import express from 'express'
 import type { Request, Response, NextFunction } from 'express'
-import guard from './guard.ts'
-import logger from './logger.ts'
+import guard from './middleware/guard.ts'
+import logger from './middleware/logger.ts'
+import { generalLimit } from './middleware/rate-limiter.ts'
 import entitiesRouter from './entities/router.ts'
 import servicesRouter from './services/router.ts'
 
@@ -10,8 +11,11 @@ let app = express()
 // Disable unnecessary 'x-powered-by' header that Express adds by default
 app.disable('x-powered-by')
 
+// Rate limiting
+app.use(generalLimit)
+
 // Parse incoming JSON requests
-app.use(express.json())
+app.use(express.json({ limit: '1mb' }))
 
 // Parse URL query strings
 app.use(express.urlencoded({extended: true}))

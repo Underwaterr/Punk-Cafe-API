@@ -1,5 +1,5 @@
 import prisma from '#prisma'
-import { deleteAvatar, deleteImages } from '../../image-process.ts'
+import { deleteAvatar, deleteImages } from '#process-image'
 
 let select = { 
   id: true, 

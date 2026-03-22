@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
 import argon2 from 'argon2'
 import schemas from './schemas.ts'
-import validate from '#validator'
+import validate from '#validate'
 import Authentication from './model.ts'
 
 export default {
