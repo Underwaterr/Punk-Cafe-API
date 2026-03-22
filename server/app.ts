@@ -11,6 +11,10 @@ let app = express()
 // Disable unnecessary 'x-powered-by' header that Express adds by default
 app.disable('x-powered-by')
 
+// Because we'll be behind a proxy, 
+// this lets our rate-lmiter see the client's real IP via the `X-Forwarded-For` header
+app.set('trust proxy', 1)
+
 // Rate limiting
 app.use(generalLimit)
 
