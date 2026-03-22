@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import User from './model.ts'
 import schema from './schema.ts'
 import validate from '#validate'
-import { processAvatar } from '#process-image'
+import { processAvatar, deleteAvatar } from '#process-image'
 
 export default {
 
@@ -40,13 +40,14 @@ export default {
   async updateAvatar(request:Request, response:Response) {
     if (!request.file) return response.status(400).json({ error: 'Image required' })
     try {
-      let avatarPath = await processAvatar(request.file.buffer)
-      let user = await User.updateAvatar(request.user!.id, avatarPath)
-      return response.json(user)
+      var avatarPath = await processAvatar(request.file.buffer)
     }
     catch {
       return response.status(400).json({ error: 'Invalid image' })
     }
+    let user = await User.updateAvatar(request.user!.id, avatarPath)
+    if (request.user!.avatarPath) deleteAvatar(request.user!.avatarPath)
+    return response.json(user)
   },
 
   async removeMe(request:Request, response:Response) {
