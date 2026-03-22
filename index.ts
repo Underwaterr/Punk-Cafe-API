@@ -2,7 +2,7 @@ import { promisify } from 'node:util'
 import './env.ts'
 import httpServer from './server/index.ts'
 import prisma from '#prisma'
-import { logger } from './server/middleware/logger.ts'
+import logger from './utilities/logger.ts'
 
 httpServer.listen(process.env.PORT)
 
@@ -10,7 +10,7 @@ let closeServer = promisify(httpServer.close.bind(httpServer))
 let shutdown = async function() {
   await closeServer()
   await prisma.$disconnect()
-  console.log("\nGoodbye!")
+  logger.info("\nGoodbye!")
   process.exit(0)
 }
 
