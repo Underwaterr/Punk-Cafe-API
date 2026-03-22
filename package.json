@@ -17,10 +17,11 @@
     "#prisma":         "./server/database.ts",
     "#server/*":       "./server/*",
     "#generate-code":  "./utilities/generate-code.ts",
-    "#tokens":         "./utilities/tokens.ts",
+    "#logger":         "./utilities/logger.ts",
     "#process-image":  "./utilities/process-image.ts",
     "#request":        "./utilities/request.ts",
     "#test":           "./utilities/test-utilities.ts",
+    "#tokens":         "./utilities/tokens.ts",
     "#upload-image":   "./utilities/upload-image.ts",
     "#validate":       "./utilities/validate.ts"
   },

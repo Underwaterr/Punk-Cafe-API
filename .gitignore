@@ -1,5 +1,6 @@
 node_modules/
 generated/prisma/
 uploads/
+uploads-test/
 .env
 .env.test

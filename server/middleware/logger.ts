@@ -2,7 +2,9 @@ import pino from 'pino'
 import type { Request, Response, NextFunction } from 'express'
 
 let environment = process.env.NODE_ENV
-let logOptions = { level: 'info', transport:null }
+
+let logOptions = { level: 'info', transport: null }
+
 if (environment == 'development') {
   logOptions.transport = {
     target: 'pino-pretty',
@@ -14,11 +16,11 @@ if (environment == 'development') {
     }
   }
 }
-export let logger = pino(logOptions)
+
+let logger = pino(logOptions)
 
 export default function logRequest(request:Request, response:Response, next:NextFunction) {
   let start = Date.now()
-
   response.on('finish', ()=> {
     let duration = Date.now() - start
     logger.info({
@@ -29,7 +31,5 @@ export default function logRequest(request:Request, response:Response, next:Next
       duration,
     })
   })
-
   next()
 }
-
