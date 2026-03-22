@@ -1,6 +1,6 @@
 import { describe, it, before, beforeEach, after } from 'node:test'
 import assert from 'node:assert/strict'
-import { startServer, stopServer, cleanup, createTestUser } from '../test-utilities.ts'
+import { startServer, stopServer, cleanup, createTestUser } from '#test'
 import request from '#request'
 
 before(startServer)

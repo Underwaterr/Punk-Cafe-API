@@ -1,4 +1,4 @@
-import { baseUrl } from './test-utilities.ts'
+import { baseUrl } from '#test'
 
 export default {
   async get(endpoint: string) {
