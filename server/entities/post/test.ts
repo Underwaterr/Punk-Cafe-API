@@ -46,6 +46,13 @@ describe('POST /posts', () => {
     assert.equal(response.status, 400)
   })
 
+  it('returns 400 for an invalid image', async () => {
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let garbage = Buffer.from('not a real image')
+    let response = await request.withToken(token).uploadImage('posts', garbage, 'photo.png')
+    assert.equal(response.status, 400)
+  })
+
   it('returns 401 without a token', async () => {
     let image = await createTestImage()
     let form = new FormData()

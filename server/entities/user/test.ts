@@ -95,9 +95,16 @@ describe('POST /users/me/avatar', ()=> {
     assert.match(data.avatarPath, /^avatars\/[\w]+\.webp$/)
   })
 
-  it('returns 400 without an image', async () => {
+  it('returns 400 without an image', async ()=> {
     let { token } = await createTestUser('garfield', 'garf@example.com')
     let response = await request.withToken(token).post('users/me/avatar')
+    assert.equal(response.status, 400)
+  })
+
+  it('returns 400 for an invalid image', async ()=> {
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let garbage = Buffer.from('not a real image')
+    let response = await request.withToken(token).uploadImage('users/me/avatar', garbage, 'avatar.png')
     assert.equal(response.status, 400)
   })
 

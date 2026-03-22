@@ -39,11 +39,14 @@ export default {
 
   async updateAvatar(request:Request, response:Response) {
     if (!request.file) return response.status(400).json({ error: 'Image required' })
-
-    let avatarPath = await processAvatar(request.file.buffer)
-    let user = await User.updateAvatar(request.user!.id, avatarPath)
-
-    return response.json(user)
+    try {
+      let avatarPath = await processAvatar(request.file.buffer)
+      let user = await User.updateAvatar(request.user!.id, avatarPath)
+      return response.json(user)
+    }
+    catch {
+      return response.status(400).json({ error: 'Invalid image' })
+    }
   },
 
   async removeMe(request:Request, response:Response) {

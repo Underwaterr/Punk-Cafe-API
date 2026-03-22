@@ -9,9 +9,13 @@ export default {
     if (!request.file) return response.status(400).json({ error: 'Image required' })
 
     let caption = request.body.caption ?? null
-    let post = await Post.create(request.user!.id, caption, request.file.buffer)
-
-    return response.status(201).json(post)
+    try {
+      let post = await Post.create(request.user!.id, caption, request.file.buffer)
+      return response.status(201).json(post)
+    }
+    catch {
+      return response.status(400).json({ error: 'Invalid image' })
+    }
   },
 
   async getFeed(request:Request, response:Response) {
