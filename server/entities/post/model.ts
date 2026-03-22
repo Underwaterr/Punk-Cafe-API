@@ -32,6 +32,14 @@ let select = {
   }
 } as const
 
+let postSelect = function(userId?:string) {
+  if (userId) return { 
+    ...select,
+    likes: { where: { userId }, select: { id: true } }
+  }
+  else return select
+}
+
 export default {
 
   async create(authorId:string, caption:string | null, file:Buffer) {
@@ -55,92 +63,23 @@ export default {
 
   getFeed(userId:string, take:number=20, cursor?:string) {
     return prisma.post.findMany({
-      select: {
-        id: true,
-        caption: true,
-        createdAt: true,
-        author: {
-          select: {
-            id: true,
-            username: true,
-            displayName: true,
-            avatarPath: true,
-          },
-        },
-        images: {
-          select: {
-            id: true,
-            imagePath: true,
-            thumbnailPath: true,
-            width: true,
-            height: true,
-            position: true,
-          },
-          orderBy: { position: 'asc' as const },
-        },
-        _count: {
-          select: {
-            likes: true,
-            comments: true,
-          }
-        },
-        likes: {
-          where: { userId },
-          select: { id: true },
-        },
-      },
+      select: postSelect(userId),
       orderBy: { createdAt: 'desc' },
       take,
-      ...(cursor && {
-        cursor: { id: cursor },
-        skip: 1,
-      }),
+      ...(cursor && { cursor: { id: cursor }, skip: 1 }),
     })
   },
 
   getByIdForUser(id:string, userId:string) {
     return prisma.post.findUnique({
       where: { id },
-      select: {
-        id: true,
-        caption: true,
-        createdAt: true,
-        author: {
-          select: {
-            id: true,
-            username: true,
-            displayName: true,
-            avatarPath: true,
-          },
-        },
-        images: {
-          select: {
-            id: true,
-            imagePath: true,
-            thumbnailPath: true,
-            width: true,
-            height: true,
-            position: true,
-          },
-          orderBy: { position: 'asc' as const },
-        },
-        _count: {
-          select: {
-            likes: true,
-            comments: true,
-          }
-        },
-        likes: {
-          where: { userId },
-          select: { id: true },
-        }
-      }
+      select: postSelect(userId),
     })
   },
   getById(id:string ) {
     return prisma.post.findUnique({
       where: { id },
-      select
+      select: postSelect(),
     })
   },
   updateCaption(id: string, caption: string | null) {
