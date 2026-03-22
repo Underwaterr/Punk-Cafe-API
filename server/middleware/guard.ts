@@ -25,5 +25,6 @@ export default async function requireAuthentication(request:Request, response:Re
 
   request.sessionToken = token
   request.user = session.user
+  request.sessionId = session.id
   next()
 }
