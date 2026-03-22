@@ -2,7 +2,7 @@ import { createInterface } from 'node:readline'
 import { PrismaClient } from './generated/client.ts'
 import { PrismaPg } from '@prisma/adapter-pg'
 import argon2 from 'argon2'
-import generateCode from '../server/generate-code.ts'
+import generateCode from '../utilities/generate-code.ts'
 import { loadEnvFile } from 'node:process'
 try { loadEnvFile() } catch {}
 
