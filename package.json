@@ -17,7 +17,7 @@
     "#prisma":         "./server/database.ts",
     "#server/*":       "./server/*",
     "#generate-code":  "./utilities/generate-code.ts",
-    "#generate-token": "./utilities/generate-token.ts",
+    "#tokens":         "./utilities/tokens.ts",
     "#process-image":  "./utilities/process-image.ts",
     "#request":        "./utilities/request.ts",
     "#test":           "./utilities/test-utilities.ts",

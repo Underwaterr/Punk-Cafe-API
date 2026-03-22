@@ -1149,7 +1149,7 @@ export type UserAuthenticationScalarFieldEnum = (typeof UserAuthenticationScalar
 
 export const SessionScalarFieldEnum = {
   id: 'id',
-  token: 'token',
+  tokenHash: 'tokenHash',
   userId: 'userId',
   lastActive: 'lastActive',
   expiresAt: 'expiresAt',

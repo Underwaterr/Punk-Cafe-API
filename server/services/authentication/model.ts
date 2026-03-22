@@ -1,7 +1,7 @@
 import prisma from '#prisma'
 import argon2 from 'argon2'
 import generateCode from '#generate-code'
-import generateToken from '#generate-token'
+import { generateToken, hashToken } from '#tokens'
 import { ResetPasswordError } from './errors.ts'
 
 // speed up argon2 hashing when testing
@@ -44,27 +44,32 @@ export default {
       return user
     })
   },
-  createSession(userId:string) {
+  async createSession(userId:string) {
     let token = generateToken()
+    let tokenHash = hashToken(token)
     const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000
     let expiresAt = new Date(Date.now() + THIRTY_DAYS)
-    let data = { token, userId, expiresAt }
-    return prisma.session.create({ data })
+    let data = { tokenHash, userId, expiresAt }
+    let session = await prisma.session.create({
+      data: { tokenHash, userId, expiresAt },
+      select: { id: true, expiresAt: true, createdAt: true },
+    })
+    return { ...session, token }
   },
   findSession(token:string) {
     return prisma.session.findUnique({
-      where: { token },
+      where: { tokenHash: hashToken(token) },
       include: { user: true },
     })
   },
   deleteSession(token:string) {
-    return prisma.session.delete({ where: {token} })
+    return prisma.session.delete({ where: { tokenHash: hashToken(token) } })
   },
   deleteOtherSessions(userId:string, currentToken:string) {
     return prisma.session.deleteMany({
       where: {
         userId,
-        token: { not: currentToken },
+        tokenHash: { not: hashToken(currentToken) },
       },
     })
   },

@@ -44,7 +44,7 @@ describe('GET /sessions', () => {
     let response = await request.withToken(token).get('sessions')
     let data = await response.json()
 
-    assert.equal(data[0].token, undefined)
+    assert.equal(data[0].tokenHash, undefined)
   })
 
   it('does not include other users sessions', async () => {

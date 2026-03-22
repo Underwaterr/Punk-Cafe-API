@@ -43,7 +43,7 @@ model UserAuthentication {
 
 model Session {
   id         String   @id @default(dbgenerated("uuidv7()"))
-  token      String   @unique
+  tokenHash  String   @unique @map("token_hash")
   userId     String   @map("user_id")
   lastActive DateTime @default(now()) @map("last_active")
   expiresAt  DateTime @map("expires_at")

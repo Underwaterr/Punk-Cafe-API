@@ -3,7 +3,6 @@ import Session from './model.ts'
 
 export default {
   async getByUserId(request:Request, response:Response) {
-    console.log(request.sessionId)
     let sessions = await Session.getByUserId(request.user!.id)
 
     let formatted = sessions.map(session=> ({

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import type { Server } from 'node:http'
 import { rm, mkdir } from 'node:fs/promises'
 import argon2 from 'argon2'
-import generateToken from './generate-token.ts'
+import { generateToken, hashToken } from '#tokens'
 import app from '../server/app.ts'
 import prisma from '#prisma'
 import sharp from 'sharp'
@@ -57,11 +57,12 @@ export async function createTestUser(username:string, email:string, password:str
     },
   })
   let token = generateToken()
+  const ONE_MONTH = 30 * 24 * 60 * 60 * 1000
   let session = await prisma.session.create({
     data: {
-      token,
+      tokenHash: hashToken(token),
       userId: user.id,
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      expiresAt: new Date(Date.now() + ONE_MONTH),
     },
   })
   return { user, session, token }
