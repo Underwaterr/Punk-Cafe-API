@@ -7,40 +7,35 @@ before(startServer)
 beforeEach(cleanup)
 after(stopServer)
 
-describe('POST /comments', () => {
-  it('creates a comment', async () => {
+describe('POST /comments', ()=> {
+  it('creates a comment', async ()=> {
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
     let post = await createPost(token)
-
     let response = await request.withToken(token).post('comments', {
       postId: post.id,
       body: "Low-key bussin', no cap",
     })
     let data = await response.json()
-
     assert.equal(response.status, 201)
     assert.equal(data.body, "Low-key bussin', no cap")
     assert.equal(data.author.username, 'jon')
   })
 
-  it('increments the comment count on the post', async () => {
+  it('increments the comment count on the post', async ()=> {
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
     let post = await createPost(token)
-
     await request.withToken(token).post('comments', {
       postId: post.id,
       body: "Low-key bussin', no cap",
     })
-
     let response = await request.withToken(token).get(`posts/${post.id}`)
     let data = await response.json()
     assert.equal(data._count.comments, 1)
   })
 
-  it('returns 400 for empty body', async () => {
+  it('returns 400 for empty body', async ()=> {
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
     let post = await createPost(token)
-
     let response = await request.withToken(token).post('comments', {
       postId: post.id,
       body: '',
@@ -48,18 +43,27 @@ describe('POST /comments', () => {
     assert.equal(response.status, 400)
   })
 
-  it('returns 400 for missing postId', async () => {
+  it('returns 400 for missing postId', async ()=> {
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
-
     let response = await request.withToken(token).post('comments', {
       body: "Low-key bussin', no cap",
     })
     assert.equal(response.status, 400)
   })
+
+  it('returns 404 for a nonexistent post', async ()=> {
+    let { token } = await createTestUser('jon', 'arbuckle@example.com')
+    let fakeId = '00000000-0000-0000-0000-000000000000'
+    let response = await request.withToken(token).post('comments', {
+      postId: fakeId,
+      body: 'hello',
+    })
+    assert.equal(response.status, 404)
+  })
 })
 
-describe('GET /comments/post/:id', () => {
-  it('returns comments in chronological order', async () => {
+describe('GET /comments/post/:id', ()=> {
+  it('returns comments in chronological order', async ()=> {
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
     let post = await createPost(token)
 

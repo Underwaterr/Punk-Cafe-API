@@ -2,15 +2,18 @@ import type { Request, Response } from 'express'
 import validate from '#validate'
 import schema from './schema.ts'
 import Comment from './model.ts'
+import Post from '../post/model.ts'
 
 export default {
   async create(request:Request, response:Response) {
     let result = await validate(schema.create, request.body)
     if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
-
     let { postId, body } = result.value
-    let comment = await Comment.create(postId, request.user!.id, body)
 
+    let post = await Post.getById(postId)
+    if (!post) return response.status(404).json({ error: 'Post not found' })
+
+    let comment = await Comment.create(postId, request.user!.id, body)
     return response.status(201).json(comment)
   },
   async getById(request:Request, response:Response) {
