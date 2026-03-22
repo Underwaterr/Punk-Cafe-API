@@ -7,7 +7,7 @@ import Post from '../post/model.ts'
 export default {
   async create(request:Request, response:Response) {
     let result = await validate(schema.create, request.body)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid input' })
     let { postId, body } = result.value
 
     let post = await Post.getById(postId)
@@ -18,24 +18,24 @@ export default {
   },
   async getById(request:Request, response:Response) {
     let result = await validate(schema.params, request.params)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid comment ID' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid comment ID' })
 
     let comment = await Comment.getById(result.value.id)
     return response.json(comment)
   },
   async getByPostId(request: Request, response: Response) {
     let result = await validate(schema.params, request.params)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid post ID' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid post ID' })
 
     let comments = await Comment.getByPostId(result.value.id)
     return response.json(comments)
   },
   async update(request: Request, response: Response) {
     let params = await validate(schema.params, request.params)
-    if (params.isErr()) return response.status(400).json({ error: 'Invalid comment ID' })
+    if (!params.ok) return response.status(400).json({ error: 'Invalid comment ID' })
 
     let body = await validate(schema.update, request.body)
-    if (body.isErr()) return response.status(400).json({ error: 'Invalid input' })
+    if (!body.ok) return response.status(400).json({ error: 'Invalid input' })
 
     let comment = await Comment.getById(params.value.id)
     if (!comment) return response.status(404).json({ error: 'Comment not found' })
@@ -46,7 +46,7 @@ export default {
   },
   async remove(request: Request, response: Response) {
     let result = await validate(schema.params, request.params)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid comment ID' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid comment ID' })
 
     let comment = await Comment.getById(result.value.id)
     if (!comment) return response.status(404).json({ error: 'Comment not found' })

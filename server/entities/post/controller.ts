@@ -35,7 +35,7 @@ export default {
 
   async getById(request: Request, response: Response) {
     let result = await validate(schema, request.params)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid post ID' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid post ID' })
 
     let userId = request.user!.id
     let post = await Post.getByIdForUser(result.value.id, userId)
@@ -50,7 +50,7 @@ export default {
   async remove(request: Request, response: Response) {
     // Validate request
     let result = await validate(schema, request.params)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid post ID' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid post ID' })
 
     // Check if post exists
     let post = await Post.getById(result.value.id)

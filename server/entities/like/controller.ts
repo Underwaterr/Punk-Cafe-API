@@ -7,7 +7,7 @@ export default {
 
   async create(request: Request, response: Response) {
     let result = await validate(schema, request.params)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid post ID' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid post ID' })
     try {
       await Like.create(result.value.postId, request.user!.id)
       return response.status(201).json({ ok: true })
@@ -19,7 +19,7 @@ export default {
 
   async remove(request: Request, response: Response) {
     let result = await validate(schema, request.params)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid post ID' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid post ID' })
     try {
       await Like.remove(result.value.postId, request.user!.id)
       return response.status(200).json({ ok: true })

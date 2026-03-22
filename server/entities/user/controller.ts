@@ -15,7 +15,7 @@ export default {
 
     // validate parameters
     let result = await validate(schema.parameter, request.params)
-    if (result.isErr()) return response.status(400).json({error: 'Invalid user ID'})
+    if (!result.ok) return response.status(400).json({error: 'Invalid user ID'})
 
     // validate database
     let userId = result.value.id
@@ -33,7 +33,7 @@ export default {
 
   async updateProfile(request: Request, response: Response) {
     let result = await validate(schema.profileUpdate, request.body)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid input' })
 
     let user = await User.updateProfile(request.user!.id, result.value)
     return response.json(user)

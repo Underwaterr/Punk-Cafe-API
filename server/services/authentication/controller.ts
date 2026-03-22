@@ -8,7 +8,7 @@ export default {
   async register(request:Request, response:Response) {
     // Validate request body
     let result = await validate(schemas.registration, request.body)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid input' })
     let { username, email, password, code } = result.value
 
     // Confirm invitation code
@@ -35,7 +35,7 @@ export default {
   async login (request:Request, response:Response) {
     // Validate request body
     let result = await validate(schemas.login, request.body)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid input' })
     let { email, password } = result.value
 
     // Confirm user Exists
@@ -80,7 +80,7 @@ export default {
   },
   async changePassword(request:Request, response:Response) {
     let result = await validate(schemas.passwordChange, request.body)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid input' })
 
     let { currentPassword, newPassword } = result.value
     let outcome = await Authentication.changePassword(request.user!.id, currentPassword, newPassword)
@@ -95,7 +95,7 @@ export default {
     if (request.user!.role != 'admin') return response.status(403).json({ error: 'Forbidden' })
 
     let result = await validate(schemas.createResetCode, request.body)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid input' })
 
     let resetCode = await Authentication.createResetCode(result.value.email)
     if (!resetCode) return response.status(404).json({ error: 'User not found' })
@@ -104,7 +104,7 @@ export default {
   },
   async resetPassword(request: Request, response: Response) {
     let result = await validate(schemas.resetPassword, request.body)
-    if (result.isErr()) return response.status(400).json({ error: 'Invalid input' })
+    if (!result.ok) return response.status(400).json({ error: 'Invalid input' })
 
     let { code, newPassword } = result.value
     let outcome = await Authentication.resetPassword(code, newPassword)
