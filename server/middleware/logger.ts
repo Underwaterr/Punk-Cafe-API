@@ -14,7 +14,7 @@ if (environment == 'development') {
     }
   }
 }
-let logger = pino(logOptions)
+export let logger = pino(logOptions)
 
 export default function logRequest(request:Request, response:Response, next:NextFunction) {
   let start = Date.now()
