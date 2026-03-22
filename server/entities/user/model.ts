@@ -26,6 +26,13 @@ export default {
     }) 
   },
 
+  getMe(id:string) {
+    return prisma.user.findUnique({
+      where: { id },
+      select: { ...select, email: true, role: true },
+    })
+  },
+
   updateAvatar(id:string, avatarPath:string) {
     return prisma.user.update({
       where: { id },

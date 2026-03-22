@@ -26,7 +26,9 @@ export default {
   },
 
   async getMe(request:Request, response:Response) {
-    return response.json(request.user)
+    let userId = request.user!.id
+    let user = await User.getMe(userId)
+    return response.json(user)
   },
 
   async updateProfile(request: Request, response: Response) {
