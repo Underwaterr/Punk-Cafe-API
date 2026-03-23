@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "start": "node index.ts",
+    "start": "node --env-file=.env index.ts",
     "dev": "node --watch index.ts",
     "test": "node --env-file=.env.test --test --test-concurrency=1 '**/test.ts'",
     "test:watch": "node --env-file=.env.test --watch --test --test-concurrency=1 '**/test.ts'",

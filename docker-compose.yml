@@ -3,11 +3,11 @@ services:
     image: postgres:18.3
     container_name: punk-cafe-db
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     environment:
-      POSTGRES_USER: punk_cafe_admin
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: punk_cafe
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - pgdata:/var/lib/postgresql
 
