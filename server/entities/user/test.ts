@@ -29,6 +29,20 @@ describe('GET /users', ()=> {
     let data = await response.json()
     assert.equal(data[0].email, undefined)
   })
+
+  it('returns 401 without a token', async ()=> {
+    // Arrange
+    let user = { data: { username: 'odie', email: 'odie@example.com' } }
+    await prisma.user.create(user)
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+
+    // Act
+    let response = await request.get('users')
+    let data = await response.json()
+
+    // Assert
+    assert.equal(response.status, 401)
+  })
 })
 
 describe('GET /users/me', ()=> {
@@ -81,6 +95,20 @@ describe('GET /users/:id', ()=> {
     let data = await response.json()
     assert.equal(response.status, 404)
     assert.equal(data.error, 'User not found')
+  })
+
+  it('returns 401 without a token', async ()=> {
+    // Arrange
+    let user = { data: { username: 'odie', email: 'odie@example.com' } }
+    let created = await prisma.user.create(user)
+    let { token } = await createTestUser('garfield', 'garf@example.com')
+
+    // Act
+    let response = await request.get('users/' + created.id)
+    let data = await response.json()
+
+    // Assert
+    assert.equal(response.status, 401)
   })
 })
 
@@ -169,7 +197,7 @@ describe('PUT /users/me', ()=> {
     assert.equal(response.status, 400)
   })
 
-  it('returns 401 without a token', async () => {
+  it('returns 401 without a token', async ()=> {
     let response = await request.put('users/me', { displayName: 'test' })
     assert.equal(response.status, 401)
   })

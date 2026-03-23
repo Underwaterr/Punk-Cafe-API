@@ -9,16 +9,36 @@ after(stopServer)
 
 describe('POST /comments', ()=> {
   it('creates a comment', async ()=> {
+    // Arrange
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
     let post = await createPost(token)
+
+    // Act
     let response = await request.withToken(token).post('comments', {
       postId: post.id,
       body: "Low-key bussin', no cap",
     })
     let data = await response.json()
+
+    // Assert
     assert.equal(response.status, 201)
     assert.equal(data.body, "Low-key bussin', no cap")
     assert.equal(data.author.username, 'jon')
+  })
+
+  it('returns 401 without a token', async ()=> {
+    // Arrange
+    let { token } = await createTestUser('jon', 'arbuckle@example.com')
+    let post = await createPost(token)
+
+    // Act
+    let response = await request.post('comments', { 
+      postId: post.id,
+      body: "Low-key bussin', no cap",
+    })
+
+    // Assert
+    assert.equal(response.status, 401)
   })
 
   it('increments the comment count on the post', async ()=> {
@@ -66,13 +86,10 @@ describe('GET /comments/post/:id', ()=> {
   it('returns comments in chronological order', async ()=> {
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
     let post = await createPost(token)
-
     await request.withToken(token).post('comments', { postId: post.id, body: 'first' })
     await request.withToken(token).post('comments', { postId: post.id, body: 'second' })
-
     let response = await request.withToken(token).get(`comments/post/${post.id}`)
     let data = await response.json()
-
     assert.equal(data.length, 2)
     assert.equal(data[0].body, 'first')
     assert.equal(data[1].body, 'second')
@@ -81,30 +98,45 @@ describe('GET /comments/post/:id', ()=> {
   it('returns empty array for post with no comments', async () => {
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
     let post = await createPost(token)
-
     let response = await request.withToken(token).get(`comments/post/${post.id}`)
     let data = await response.json()
-
     assert.equal(data.length, 0)
   })
+
+  it('returns 401 without a token', async ()=> {
+    // Arrange
+    let { token } = await createTestUser('jon', 'arbuckle@example.com')
+    let post = await createPost(token)
+    await request.withToken(token).post('comments', { postId: post.id, body: 'first' })
+    await request.withToken(token).post('comments', { postId: post.id, body: 'second' })
+
+    // Act
+    let response = await request.get(`comments/post/${post.id}`)
+
+    // Assert
+    assert.equal(response.status, 401)
+  })
+
 })
 
 describe('PUT /comments/:id', () => {
   it('updates a comment', async () => {
+    // Arrange
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
     let post = await createPost(token)
-
     let created = await request.withToken(token).post('comments', {
       postId: post.id,
       body: 'original',
     })
     let comment = await created.json()
 
+    // Act
     let response = await request.withToken(token).put(`comments/${comment.id}`, {
       body: 'edited',
     })
     let data = await response.json()
 
+    // Assert
     assert.equal(response.status, 200)
     assert.equal(data.body, 'edited')
   })
@@ -140,6 +172,23 @@ describe('PUT /comments/:id', () => {
       body: '',
     })
     assert.equal(response.status, 400)
+  })
+
+  it('returns 401 without a token', async ()=> {
+    // Arrange
+    let { token } = await createTestUser('jon', 'arbuckle@example.com')
+    let post = await createPost(token)
+    let created = await request.withToken(token).post('comments', {
+      postId: post.id,
+      body: 'original',
+    })
+    let comment = await created.json()
+
+    // Act
+    let response = await request.put(`comments/${comment.id}`, { body: 'edited' })
+
+    // Assert
+    assert.equal(response.status, 401)
   })
 })
 
@@ -199,5 +248,22 @@ describe('DELETE /comments/:id', () => {
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
     let response = await request.withToken(token).delete('comments/00000000-0000-0000-0000-000000000000')
     assert.equal(response.status, 404)
+  })
+
+  it('returns 401 without a token', async ()=> {
+    // Arrange
+    let { token } = await createTestUser('jon', 'arbuckle@example.com')
+    let post = await createPost(token)
+    let created = await request.withToken(token).post('comments', {
+      postId: post.id,
+      body: 'to be deleted',
+    })
+    let comment = await created.json()
+
+    // Act
+    let response = await request.delete(`comments/${comment.id}`)
+
+    // Assert
+    assert.equal(response.status, 401)
   })
 })

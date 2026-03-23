@@ -53,11 +53,16 @@ describe('POST /posts', () => {
     assert.equal(response.status, 400)
   })
 
-  it('returns 401 without a token', async () => {
+  it('returns 401 without a token', async ()=> {
+    // Arrange
     let image = await createTestImage()
     let form = new FormData()
     form.append('image', new Blob([new Uint8Array(image)]), 'photo.png')
+
+    // Act
     let response = await request.postFormData('posts', form)
+
+    // Assert
     assert.equal(response.status, 401)
   })
 })

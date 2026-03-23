@@ -15,10 +15,14 @@ async function createPost(token: string) {
 
 describe('POST /likes/:postId', () => {
   it('likes a post', async () => {
+    // Arrange
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
     let post = await createPost(token)
 
+    // Act
     let response = await request.withToken(token).post(`likes/${post.id}`)
+    
+    // Assert
     assert.equal(response.status, 201)
   })
 
@@ -47,6 +51,18 @@ describe('POST /likes/:postId', () => {
     let { token } = await createTestUser('jon', 'arbuckle@example.com')
     let response = await request.withToken(token).post('likes/not-a-uuid')
     assert.equal(response.status, 400)
+  })
+
+  it('returns 401 without a token', async ()=> {
+    // Arrange
+    let { token } = await createTestUser('jon', 'arbuckle@example.com')
+    let post = await createPost(token)
+
+    // Act
+    let response = await request.post(`likes/${post.id}`)
+    
+    // Assert
+    assert.equal(response.status, 401)
   })
 })
 
@@ -79,5 +95,18 @@ describe('DELETE /likes/:postId', () => {
 
     let response = await request.withToken(token).delete(`likes/${post.id}`)
     assert.equal(response.status, 404)
+  })
+
+  it('returns 401 without a token', async ()=> {
+    // Arrange
+    let { token } = await createTestUser('jon', 'arbuckle@example.com')
+    let post = await createPost(token)
+    await request.withToken(token).post(`likes/${post.id}`)
+
+    // Act
+    let response = await request.delete(`likes/${post.id}`)
+
+    // Assert
+    assert.equal(response.status, 401)
   })
 })
