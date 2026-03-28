@@ -21,8 +21,8 @@ export default {
     currentPassword: vine.string(), // don't enforce in case the password rules change
     newPassword: getPasswordRules()
   }),
-  createResetCode: vine.object({
-    email: vine.string().email(),
+  createPasswordResetCode: vine.object({
+    id: vine.string().uuid()
   }),
   resetPassword: vine.object({
     code: vine.string(),

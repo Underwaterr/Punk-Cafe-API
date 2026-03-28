@@ -91,13 +91,13 @@ export default {
 
     return response.status(200).json({ ok: true })
   },
-  async createResetCode(request:Request, response:Response) {
+  async createPasswordResetCode(request:Request, response:Response) {
     if (request.user!.role != 'admin') return response.status(403).json({ error: 'Forbidden' })
 
-    let result = await validate(schemas.createResetCode, request.body)
+    let result = await validate(schemas.createPasswordResetCode, request.body)
     if (!result.ok) return response.status(400).json({ error: 'Invalid input' })
 
-    let resetCode = await Authentication.createResetCode(result.value.email)
+    let resetCode = await Authentication.createPasswordResetCode(result.value.id)
     if (!resetCode) return response.status(404).json({ error: 'User not found' })
 
     return response.status(201).json(resetCode)

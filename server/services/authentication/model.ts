@@ -154,9 +154,9 @@ export default {
 
     return { error: null }
   },
-  async createResetCode(email: string) {
+  async createPasswordResetCode(id: string) {
     let user = await prisma.user.findUnique({ 
-      where: { email } 
+      where: { id } 
     })
 
     if (!user) return null

@@ -8,16 +8,16 @@ before(startServer)
 beforeEach(cleanup)
 after(stopServer)
 
-describe('POST /authentication/password-reset-code', () => {
-  it('creates a reset code as admin', async () => {
+describe('POST /authentication/password-reset-code', ()=> {
+  it('creates a reset code as admin', async ()=> {
     // Arrange
     let arlene = await createTestUser('arlene', 'arlene@example.com')
-    await createTestUser('nermal', 'cutie@example.com')
+    let nermal = await createTestUser('nermal', 'cutie@example.com')
     await prisma.user.update({ where: { id: arlene.user.id }, data: { role: 'admin' } })
 
     // Act
     let response = await request.withToken(arlene.token).post('authentication/password-reset-code', {
-      email: 'cutie@example.com',
+      id: nermal.user.id
     })
     let data = await response.json()
 
@@ -40,14 +40,14 @@ describe('POST /authentication/password-reset-code', () => {
     assert.equal(response.status, 403)
   })
 
-  it('returns 404 for nonexistent email', async () => {
+  it('returns 404 for nonexistent id', async () => {
     // Arrange
     let arlene = await createTestUser('arlene', 'arlene@example.com')
     await prisma.user.update({ where: { id: arlene.user.id }, data: { role: 'admin' } })
 
     // Act
     let response = await request.withToken(arlene.token).post('authentication/password-reset-code', {
-      email: 'nobody@example.com',
+      id: '00000000-0000-0000-0000-000000000000'
     })
 
     // Assert
@@ -63,7 +63,7 @@ describe('POST /authentication/reset-password', () => {
     let newPassword = 'cooler-password-420'
     let arlene = await createTestUser('arlene', email, oldPassword)
     await prisma.user.update({ where: { id: arlene.user.id }, data: { role: 'admin' } })
-    let response = await request.withToken(arlene.token).post('authentication/password-reset-code', { email })
+    let response = await request.withToken(arlene.token).post('authentication/password-reset-code', { id: arlene.user.id })
     let { code } = await response.json()
 
     // Act
@@ -83,7 +83,7 @@ describe('POST /authentication/reset-password', () => {
     await prisma.user.update({ where: { id: arlene.user.id }, data: { role: 'admin' } })
     let secondLogin = await request.post('authentication/login', { email, oldPassword })
     let secondToken = (await secondLogin.json()).token
-    let resetResponse = await request.withToken(arlene.token).post('authentication/password-reset-code', { email })
+    let resetResponse = await request.withToken(arlene.token).post('authentication/password-reset-code', { id: arlene.user.id })
     let { code } = await resetResponse.json()
 
     // Act
