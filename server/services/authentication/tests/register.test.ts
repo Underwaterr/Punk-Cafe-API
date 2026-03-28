@@ -8,18 +8,19 @@ before(startServer)
 beforeEach(cleanup)
 after(stopServer)
 
-async function createInvitation(userId: string) {
+async function createInvitation(realName:string, userId: string) {
   return await prisma.invitation.create({
     data: {
+      realName,
       code: 'test-invite-code',
       invitedBy: userId,
-    },
+    }
   })
 }
 
 describe('POST /authentication/register', () => {
   let invited = {
-    username: 'nermal',
+    realName: 'Nermal',
     email: 'cutie@example.com',
     password: '12345678yeah',
     code: 'test-invite-code'
@@ -27,8 +28,8 @@ describe('POST /authentication/register', () => {
 
   it('creates a user and returns a session token', async () => {
     // Arrange
-    let inviter = await createTestUser('arlene', 'arlene@example.com')
-    await createInvitation(inviter.user.id)
+    let inviter = await createTestUser('Arlene', 'arlene@example.com')
+    await createInvitation('Nermal', inviter.user.id)
 
     // Act
     let response = await request.post('authentication/register', invited)
@@ -38,13 +39,13 @@ describe('POST /authentication/register', () => {
     assert.equal(response.status, 201)
     assert.ok(data.session.token)
     assert.ok(data.session.expiresAt)
-    assert.equal(data.user.username, 'nermal')
+    assert.equal(data.user.realName, 'Nermal')
   })
 
   it('redeems the invitation', async () => {
     // Arrange
-    let inviter = await createTestUser('arlene', 'arlene@example.com')
-    await createInvitation(inviter.user.id)
+    let inviter = await createTestUser('Arlene', 'arlene@example.com')
+    await createInvitation('Nermal', inviter.user.id)
 
     // Act
     await request.post('authentication/register', invited)
@@ -58,9 +59,9 @@ describe('POST /authentication/register', () => {
     assert.ok(invitation?.redeemedAt)
   })
 
-  it('returns 400 for invalid username', async () => {
+  it('returns 400 for invalid name', async () => {
     // Arrange
-    let badUser = { ...invited, username: '' }
+    let badUser = { ...invited, realName: false }
 
     // Act
     let response = await request.post('authentication/register', badUser)
@@ -112,8 +113,8 @@ describe('POST /authentication/register', () => {
 
   it('returns 400 for an already redeemed invite code', async () => {
     // Arrange
-    let inviter = await createTestUser('arlene', 'arlene@example.com')
-    let invitation = await createInvitation(inviter.user.id)
+    let inviter = await createTestUser('Arlene', 'arlene@example.com')
+    let invitation = await createInvitation('Nermal', inviter.user.id)
     await prisma.invitation.update({
       where: { code: invitation.code },
       data: {
@@ -131,26 +132,11 @@ describe('POST /authentication/register', () => {
     assert.equal(data.error, 'Invite code already used')
   })
 
-  it('returns 409 for a duplicate username', async () => {
+  it('returns 409 for a duplicate email', async ()=> {
     // Arrange
-    let inviter = await createTestUser('arlene', 'arlene@example.com')
-    await createInvitation(inviter.user.id)
-    await createTestUser(invited.username, 'unique@example.com')
-
-    // Act
-    let response = await request.post('authentication/register', invited)
-    let data = await response.json()
-
-    // Assert
-    assert.equal(response.status, 409)
-    assert.equal(data.error, 'Username already taken')
-  })
-
-  it('returns 409 for a duplicate email', async () => {
-    // Arrange
-    let inviter = await createTestUser('arlene', 'arlene@example.com')
-    await createInvitation(inviter.user.id)
-    await createTestUser('unique', invited.email)
+    let inviter = await createTestUser('Arlene', 'arlene@example.com')
+    await createInvitation('Unique', inviter.user.id)
+    await createTestUser('Unique', invited.email)
 
     // Act
     let response = await request.post('authentication/register', invited)

@@ -3,8 +3,7 @@ import { deleteAvatar, deleteImages } from '#process-image'
 
 let select = { 
   id: true, 
-  username: true,
-  displayName: true,
+  realName: true,
   avatarPath: true,
   createdAt: true,
   pronouns: true,
@@ -41,7 +40,7 @@ export default {
     })
   },
 
-  updateProfile(id:string, data: { displayName?:string, pronouns?:string, bio?:string }) {
+  updateProfile(id:string, data: { pronouns?:string, bio?:string }) {
     return prisma.user.update({
       where: { id },
       data,

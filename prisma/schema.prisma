@@ -1,14 +1,13 @@
 model User {
-  id          String   @id @default(dbgenerated("uuidv7()"))
-  username    String   @unique
-  displayName String?  @map("display_name")
-  email       String   @unique
-  avatarPath  String?  @map("avatar_path")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  pronouns    String?
-  bio         String?
-  role        String   @default("user")
+  id         String   @id @default(dbgenerated("uuidv7()"))
+  email      String   @unique
+  realName   String   @map("real_name")
+  avatarPath String?  @map("avatar_path")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  pronouns   String?
+  bio        String?
+  role       String   @default("user")
 
   authentication      UserAuthentication?
   sessions            Session[]
@@ -18,7 +17,6 @@ model User {
   posts               Post[]
   likes               Like[]
   comments            Comment[]
-
 
   @@map("users")
 }
@@ -58,6 +56,7 @@ model Invitation {
   id         String    @id @default(dbgenerated("uuidv7()"))
   code       String    @unique
   invitedBy  String    @map("invited_by")
+  realName   String    @map("real_name")
   redeemedBy String?   @map("redeemed_by")
   redeemedAt DateTime? @map("redeemed_at")
   expiresAt  DateTime? @map("expires_at")
@@ -89,11 +88,10 @@ model Post {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  author    User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  images    PostImage[]
-  likes     Like[]
-  comments  Comment[]
-
+  author   User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  images   PostImage[]
+  likes    Like[]
+  comments Comment[]
 
   @@map("posts")
 }

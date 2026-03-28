@@ -8,10 +8,9 @@ let select = {
   author: {
     select: {
       id: true,
-      username: true,
-      displayName: true,
-      avatarPath: true,
-    },
+      realName: true,
+      avatarPath: true
+    }
   },
   images: {
     select: {

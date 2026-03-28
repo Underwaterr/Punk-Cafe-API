@@ -12,7 +12,7 @@ describe('GET /users', ()=> {
 
   it('returns all users', async ()=> {
     // Arrange
-    let user = { data: { username: 'odie', email: 'odie@example.com' } }
+    let user = { data: { realName: 'Odie', email: 'odie@example.com' } }
     await prisma.user.create(user)
     let { token } = await createTestUser('garfield', 'garf@example.com')
 
@@ -23,12 +23,12 @@ describe('GET /users', ()=> {
     // Assert
     assert.equal(response.status, 200)
     assert.equal(data.length, 2)
-    assert.equal(data[1].username, 'odie')
+    assert.equal(data[1].realName, 'Odie')
   })
 
   it('does not expose email', async ()=> {
     // Arrange
-    let user = { data: { username: 'odie', email: 'odie@example.com' } }
+    let user = { data: { realName: 'Odie', email: 'odie@example.com' } }
     await prisma.user.create(user)
     let { token } = await createTestUser('garfield', 'garf@example.com')
 
@@ -42,7 +42,7 @@ describe('GET /users', ()=> {
 
   it('returns 401 without a token', async ()=> {
     // Arrange
-    let user = { data: { username: 'odie', email: 'odie@example.com' } }
+    let user = { data: { realName: 'Odie', email: 'odie@example.com' } }
     await prisma.user.create(user)
     let { token } = await createTestUser('garfield', 'garf@example.com')
 
@@ -58,7 +58,7 @@ describe('GET /users', ()=> {
 describe('GET /users/me', ()=> {
   it('returns the authenticated user', async ()=> {
     // Arrange
-    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let { token } = await createTestUser('Garfield', 'garf@example.com')
 
     // Act
     let response = await request.withToken(token).get('users/me')
@@ -66,7 +66,7 @@ describe('GET /users/me', ()=> {
 
     // Assert
     assert.equal(response.status, 200)
-    assert.equal(data.username, 'garfield')
+    assert.equal(data.realName, 'Garfield')
     assert.equal(data.email, 'garf@example.com')
   })
 
@@ -82,9 +82,9 @@ describe('GET /users/me', ()=> {
 describe('GET /users/:id', ()=> {
   it('returns a user by id', async ()=> {
     // Arrange
-    let user = { data: { username: 'odie', email: 'odie@example.com' } }
+    let user = { data: { realName: 'Odie', email: 'odie@example.com' } }
     let created = await prisma.user.create(user)
-    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let { token } = await createTestUser('Garfield', 'garf@example.com')
 
     // Act
     let response = await request.withToken(token).get('users/' + created.id)
@@ -92,13 +92,13 @@ describe('GET /users/:id', ()=> {
 
     // Assert
     assert.equal(response.status, 200)
-    assert.equal(data.username, 'odie')
+    assert.equal(data.realName, 'Odie')
     assert.equal(data.id, created.id)
   })
 
   it('returns 400 for an invalid UUID', async ()=> {
     // Arrange
-    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let { token } = await createTestUser('Garfield', 'garf@example.com')
 
     // Act
     let response = await request.withToken(token).get('users/not-a-uuid')
@@ -111,7 +111,7 @@ describe('GET /users/:id', ()=> {
 
   it('returns 400 for a numeric ID', async ()=> {
     // Arrange
-    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let { token } = await createTestUser('Garfield', 'garf@example.com')
 
     // Act
     let response = await request.withToken(token).get('users/123')
@@ -124,7 +124,7 @@ describe('GET /users/:id', ()=> {
 
   it('returns 404 for nonexistent user', async ()=> {
     // Arrange
-    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let { token } = await createTestUser('Garfield', 'garf@example.com')
 
     // Act
     let response = await request.withToken(token).get('users/00000000-0000-0000-0000-000000000000')
@@ -137,7 +137,7 @@ describe('GET /users/:id', ()=> {
 
   it('returns 401 without a token', async ()=> {
     // Arrange
-    let user = { data: { username: 'odie', email: 'odie@example.com' } }
+    let user = { data: { realName: 'Odie', email: 'odie@example.com' } }
     let created = await prisma.user.create(user)
     let { token } = await createTestUser('garfield', 'garf@example.com')
 
@@ -214,17 +214,17 @@ describe('POST /users/me/avatar', ()=> {
 })
 
 describe('PUT /users/me', ()=> {
-  it('updates display name', async ()=> {
+  it('updates real name', async ()=> {
     // Arrange
     let { token } = await createTestUser('garfield', 'garf@example.com')
 
     // Act
-    let response = await request.withToken(token).put('users/me', { displayName: 'Garfield the Cat' })
+    let response = await request.withToken(token).put('users/me', { realName: 'Garfield the Cat' })
     let data = await response.json()
 
     // Assert
     assert.equal(response.status, 200)
-    assert.equal(data.displayName, 'Garfield the Cat')
+    assert.equal(data.realName, 'Garfield the Cat')
   })
 
   it('updates pronouns', async ()=> {
@@ -255,11 +255,11 @@ describe('PUT /users/me', ()=> {
 
   it('updates multiple fields at once', async ()=> {
     // Arrange
-    let { token } = await createTestUser('garfield', 'garf@example.com')
+    let { token } = await createTestUser('Garfield', 'garf@example.com')
 
     // Act
     let response = await request.withToken(token).put('users/me', {
-      displayName: 'Garfield the Cat',
+      realName: 'Garfield the Cat',
       pronouns: 'he/him',
       bio: "I have no idea what's going on",
     })
@@ -267,7 +267,7 @@ describe('PUT /users/me', ()=> {
 
     // Assert
     assert.equal(response.status, 200)
-    assert.equal(data.displayName, 'Garfield the Cat')
+    assert.equal(data.realName, 'Garfield the Cat')
     assert.equal(data.pronouns, 'he/him')
     assert.equal(data.bio, "I have no idea what's going on")
   })
@@ -285,7 +285,7 @@ describe('PUT /users/me', ()=> {
 
   it('returns 401 without a token', async ()=> {
     // Act
-    let response = await request.put('users/me', { displayName: 'test' })
+    let response = await request.put('users/me', { realName: 'test' })
 
     // Assert
     assert.equal(response.status, 401)

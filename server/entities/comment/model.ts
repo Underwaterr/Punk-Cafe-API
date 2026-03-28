@@ -7,8 +7,7 @@ let select = {
   author: {
     select: {
       id: true,
-      username: true,
-      displayName: true,
+      realName: true,
       avatarPath: true,
     },
   },

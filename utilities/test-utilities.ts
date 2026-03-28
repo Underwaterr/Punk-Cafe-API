@@ -47,11 +47,11 @@ export async function cleanup() {
 
 export { baseUrl }
 
-export async function createTestUser(username:string, email:string, password:string='test-password-123') {
+export async function createTestUser(realName:string, email:string, password:string='test-password-123') {
   let passwordHash = await argon2.hash(password, { memoryCost: 1024, timeCost: 1, parallelism: 1 })
   let user = await prisma.user.create({
     data: {
-      username,
+      realName,
       email,
       authentication: { create: { passwordHash } },
     },

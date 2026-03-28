@@ -22,16 +22,13 @@ export default {
       include: { authentication: true },
     })
   },
-  findUserByUsername(username:string) {
-    return prisma.user.findUnique({ where:{username} })
-  },
-  async registerUser(username:string, email:string, password:string, code:string) {
+  async registerUser(realName:string, email:string, password:string, code:string) {
     let passwordHash = await argon2.hash(password, hashOptions)
 
     return prisma.$transaction(async tx=> {
       // Create the User
       let user = await tx.user.create({
-        data: { username, email, authentication: { create: { passwordHash } } }
+        data: { realName, email, authentication: { create: { passwordHash } } }
       })
       // Mark invite code as used
       await tx.invitation.update({

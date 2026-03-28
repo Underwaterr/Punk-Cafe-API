@@ -12,7 +12,7 @@ describe('POST /authentication/login', () => {
   it('returns a session token on valid credentials', async () => {
     // Arrange
     let newUser = { email: 'cutie@example.com', password: 'cool-password-69' }
-    await createTestUser('nermal', newUser.email, newUser.password)
+    await createTestUser('Nermal', newUser.email, newUser.password)
 
     // Act
     let response = await request.post('authentication/login', newUser)
@@ -22,7 +22,7 @@ describe('POST /authentication/login', () => {
     assert.equal(response.status, 200)
     assert.ok(data.session.token)
     assert.ok(data.session.expiresAt)
-    assert.equal(data.user.username, 'nermal')
+    assert.equal(data.user.realName, 'Nermal')
   })
 
   it('returns 401 for a wrong password', async () => {

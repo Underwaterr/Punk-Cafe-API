@@ -10,7 +10,7 @@ after(stopServer)
 describe('POST /comments', ()=> {
   it('creates a comment', async ()=> {
     // Arrange
-    let { token } = await createTestUser('jon', 'arbuckle@example.com')
+    let { token } = await createTestUser('Jon', 'arbuckle@example.com')
     let post = await createPost(token)
 
     // Act
@@ -23,7 +23,7 @@ describe('POST /comments', ()=> {
     // Assert
     assert.equal(response.status, 201)
     assert.equal(data.body, "Low-key bussin', no cap")
-    assert.equal(data.author.username, 'jon')
+    assert.equal(data.author.realName, 'Jon')
   })
 
   it('returns 401 without a token', async ()=> {
@@ -273,7 +273,7 @@ describe('DELETE /comments/:id', () => {
     let lyman = await createTestUser('lyman', 'lyman@example.com')
     let prisma = (await import('#prisma')).default
     await prisma.user.update({
-      where: { username: 'lyman' },
+      where: { id: lyman.user.id },
       data: { role: 'admin' },
     })
     let post = await createPost(jon.token)

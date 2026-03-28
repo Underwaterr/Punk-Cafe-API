@@ -24,7 +24,7 @@ export default function logRequest(request:Request, response:Response, next:Next
   response.on('finish', ()=> {
     let duration = Date.now() - start
     logger.info({
-      user: request.user?.username ?? null,
+      user: request.user?.realName ?? null,
       method: request.method,
       path: request.originalUrl,
       status: response.statusCode,

@@ -50,7 +50,7 @@ describe('POST /posts', () => {
     let data = await response.json()
 
     // Assert
-    assert.equal(data.author.username, 'garfield')
+    assert.equal(data.author.realName, 'garfield')
   })
 
   it('returns 400 without an image', async () => {
@@ -203,7 +203,7 @@ describe('GET /posts/:id', () => {
     assert.equal(response.status, 200)
     assert.equal(data.caption, 'test')
     assert.ok(data.images.length > 0)
-    assert.ok(data.author.username)
+    assert.ok(data.author.realName)
   })
 
   it('returns 404 for nonexistent post', async () => {

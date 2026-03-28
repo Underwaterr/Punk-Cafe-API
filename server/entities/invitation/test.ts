@@ -13,21 +13,22 @@ describe('POST /invitations', ()=> {
     let { token } = await createTestUser('Garfield', 'garf@example.com')
 
     // Act
-    let response = await request.withToken(token).post('invitations')
+    let response = await request.withToken(token).post('invitations', { realName: 'Pooky'} )
     let data = await response.json()
 
     // Assert
     assert.equal(response.status, 201)
     assert.ok(data.code)
+    assert.equal(data.realName, 'Pooky')
 
     // two lowercase words and a two-digit number separated by hyphens
-    let validInvitationRegex = /^[a-z]+-[a-z]+-\d{2}$/
-    assert.match(data.code, validInvitationRegex)
+    let validInvitationCodeRegex = /^[a-z]+-[a-z]+-\d{2}$/
+    assert.match(data.code, validInvitationCodeRegex)
   })
 
   it('returns 401 without a token', async ()=> {
     // Act
-    let response = await request.post('invitations')
+    let response = await request.post('invitations', { realName: 'Pooky'} )
 
     // Assert
     assert.equal(response.status, 401)
@@ -38,8 +39,8 @@ describe('GET /invitations/mine', ()=> {
   it('returns the current users invitations', async ()=> {
     // Arrange
     let { token } = await createTestUser('Garfield', 'garf@example.com')
-    await request.withToken(token).post('invitations')
-    await request.withToken(token).post('invitations')
+    await request.withToken(token).post('invitations', { realName: 'Pooky' })
+    await request.withToken(token).post('invitations', { realName: 'Pooky' })
 
     // Act
     let response = await request.withToken(token).get('invitations/mine')
