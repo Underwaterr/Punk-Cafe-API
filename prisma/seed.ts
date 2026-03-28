@@ -6,17 +6,36 @@ import generateCode from '../utilities/generate-code.ts'
 import { loadEnvFile } from 'node:process'
 try { loadEnvFile() } catch {}
 
-let username = process.argv[2]
-let email = process.argv[3]
+let email = await new Promise<string>(resolve=> {
+  let rl = createInterface({ input: process.stdin, output: process.stdout })
+  rl.question('What is your email? ', answer=> {
+    rl.close()
+    resolve(answer)
+  })
+})
 
-if (!username || !email) {
-  console.error('Usage: npm run db:seed -- <username> <email>')
+if (!email) {
+  console.error('Email is required')
   process.exit(1)
 }
 
-let password = await new Promise<string>((resolve) => {
+
+let realName = await new Promise<string>(resolve=> {
   let rl = createInterface({ input: process.stdin, output: process.stdout })
-  rl.question('Admin password: ', answer=> {
+  rl.question('What is your name? ', answer=> {
+    rl.close()
+    resolve(answer)
+  })
+})
+
+if (!realName) {
+  console.error('Name is required')
+  process.exit(1)
+}
+
+let password = await new Promise<string>(resolve=> {
+  let rl = createInterface({ input: process.stdin, output: process.stdout })
+  rl.question('Enter password: ', answer=> {
     rl.close()
     resolve(answer)
   })
@@ -35,7 +54,7 @@ let code = generateCode()
 
 let user = await prisma.user.create({
   data: {
-    username,
+    realName,
     email,
     role: 'admin',
     authentication: { create: { passwordHash } },
@@ -44,12 +63,13 @@ let user = await prisma.user.create({
 
 let invitation = await prisma.invitation.create({
   data: {
+    realName,
     code,
     invitedBy: user.id,
   },
 })
 
-console.log(`Admin created: ${user.username} (${email})`)
+console.log(`Admin created: ${user.realName} (${email})`)
 console.log(`First invite code: ${invitation.code}`)
 
 await prisma.$disconnect()
