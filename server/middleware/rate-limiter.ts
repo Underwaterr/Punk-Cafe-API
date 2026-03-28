@@ -13,7 +13,7 @@ export let generalLimit = rateLimit({
 // 10 attempts per 15 minutes for login and registration, since those are the brute force targets
 export let authenticationLimit = rateLimit({
   windowMs: FIFTEEN_MINUTES,
-  limit: 10,
+  limit: 20,
   skip: ()=> IS_TEST,
   message: { error: 'Too many attempts. Try again later.' },
 })
