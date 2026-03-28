@@ -4,7 +4,6 @@ let getPasswordRules = ()=> vine.string().minLength(12).maxLength(128).clone()
 
 export default {
   registration: vine.object({
-    realName: vine.string(),
     email: vine.string().email(),
     password: getPasswordRules(),
     code: vine.string()

@@ -9,7 +9,7 @@ export default {
     // Validate request body
     let result = await validate(schemas.registration, request.body)
     if (!result.ok) return response.status(400).json({ error: 'Invalid input' })
-    let { realName, email, password, code } = result.value
+    let { email, password, code } = result.value
 
     // Confirm invitation code
     let invitation = await Authentication.findInvitation(code)
@@ -23,7 +23,7 @@ export default {
     if (emailAlreadyExists) return response.status(409).json({ error: 'Email already taken' })
  
     // Create the user
-    let user = await Authentication.registerUser( realName, email, password, code)
+    let user = await Authentication.registerUser( email, password, code)
     let session = await Authentication.createSession(user.id)
 
     return response.status(201).json({ user, session })

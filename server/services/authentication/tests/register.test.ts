@@ -59,19 +59,6 @@ describe('POST /authentication/register', () => {
     assert.ok(invitation?.redeemedAt)
   })
 
-  it('returns 400 for invalid name', async () => {
-    // Arrange
-    let badUser = { ...invited, realName: false }
-
-    // Act
-    let response = await request.post('authentication/register', badUser)
-    let data = await response.json()
-
-    // Assert
-    assert.equal(response.status, 400)
-    assert.equal(data.error, 'Invalid input')
-  })
-
   it('returns 400 for invalid password', async () => {
     // Arrange
     let badUser = { ...invited, password: 'short' }

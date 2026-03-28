@@ -22,7 +22,7 @@ export default {
       include: { authentication: true },
     })
   },
-  async registerUser(realName:string, email:string, password:string, code:string) {
+  async registerUser(email:string, password:string, code:string) {
     let passwordHash = await argon2.hash(password, hashOptions)
 
     return prisma.$transaction(async tx=> {
@@ -48,7 +48,6 @@ export default {
     let tokenHash = hashToken(token)
     const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000
     let expiresAt = new Date(Date.now() + THIRTY_DAYS)
-    let data = { tokenHash, userId, expiresAt }
     let session = await prisma.session.create({
       data: { tokenHash, userId, expiresAt },
       select: { id: true, expiresAt: true, createdAt: true },
