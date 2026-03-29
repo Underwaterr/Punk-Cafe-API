@@ -320,8 +320,8 @@ describe('PUT /posts/:id', ()=> {
   })
 })
 
-describe('DELETE /posts/:id', () => {
-  it('deletes a post', async () => {
+describe('DELETE /posts/:id', ()=> {
+  it('deletes a post', async ()=> {
     // Arrange
     let image = await createTestImage()
     let { token } = await createTestUser('garfield', 'garf@example.com')

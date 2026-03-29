@@ -11,10 +11,10 @@ let hashOptions = (process.env.NODE_ENV == 'test')
 
 export default {
   findInvitation(code:string) {
-    return prisma.invitation.findUnique({ where:{code} })
+    return prisma.invitation.findUnique({ where: {code} })
   },
   findUserByEmail(email:string) {
-    return prisma.user.findUnique({ where:{email} })
+    return prisma.user.findUnique({ where: {email} })
   },
   findUserByEmailWithAuth(email:string) {
     return prisma.user.findUnique({

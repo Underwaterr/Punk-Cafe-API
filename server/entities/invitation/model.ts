@@ -16,5 +16,10 @@ export default {
       where: { invitedBy },
       orderBy: { createdAt: 'desc' }
     })
+  },
+  remove(id:string) {
+    return prisma.invitation.delete({
+      where: { id }
+    })
   }
 }

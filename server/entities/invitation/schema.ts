@@ -4,4 +4,7 @@ export default {
   create: vine.object({
     realName: vine.string()
   }),
+  remove: vine.object({
+    id: vine.string().uuid()
+  })
 }

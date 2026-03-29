@@ -72,3 +72,19 @@ describe('GET /invitations/mine', ()=> {
     assert.equal(response.status, 401)
   })
 })
+
+describe('DELETE /invitations/:id', ()=> {
+  it('deletes an invitation', async ()=> {
+    let { token } = await createTestUser('Garfield', 'garf@example.com')
+    let created = await request.withToken(token).post('invitations', { realName: 'Pooky' })
+    let invitation = await created.json()
+
+    // Act
+    let response = await request.withToken(token).delete('invitations/' + invitation.id)
+    let fetched = await request.withToken(token).get('invitations/' + invitation.id)
+
+    // Assert
+    assert.equal(response.status, 201)
+    assert.equal(fetched.status, 404)
+  })
+})

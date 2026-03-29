@@ -12,6 +12,13 @@ export default {
     let invitation = await Invitation.create(userId, realName)
     return response.status(201).json(invitation)
   },
+  async remove(request:Request, response:Response) {
+    let result = await validate(schema.remove, request.params)
+    if (!result.ok) return response.status(400).json({error: 'Invalid ID'})
+    let invitationId = result.value!.id
+    await Invitation.remove(invitationId)
+    return response.status(201).json({ok: true})
+  },
   async mine(request:Request, response:Response) {
     let currentUserId = request.user!.id 
     let invitations = await Invitation.getByUser(currentUserId)
