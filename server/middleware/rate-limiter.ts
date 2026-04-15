@@ -3,10 +3,10 @@ import rateLimit from 'express-rate-limit'
 const IS_TEST = process.env.NODE_ENV == 'test'
 const FIFTEEN_MINUTES = 15 * 60 * 1000
 
-// 100 requests per 15 minutes for normal usage
+// 1000 requests per 15 minutes for normal usage
 export let generalLimit = rateLimit({
   windowMs: FIFTEEN_MINUTES,
-  limit: 100,
+  limit: 1000,
   message: { error: 'Too many requests. Try again later.' },
 })
 
