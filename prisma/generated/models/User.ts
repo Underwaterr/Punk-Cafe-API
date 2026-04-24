@@ -220,7 +220,7 @@ export type UserWhereInput = {
   invitationsRedeemed?: Prisma.InvitationListRelationFilter
   passwordResetCodes?: Prisma.PasswordResetCodeListRelationFilter
   posts?: Prisma.PostListRelationFilter
-  likes?: Prisma.LikeListRelationFilter
+  reactions?: Prisma.ReactionListRelationFilter
   comments?: Prisma.CommentListRelationFilter
 }
 
@@ -240,7 +240,7 @@ export type UserOrderByWithRelationInput = {
   invitationsRedeemed?: Prisma.InvitationOrderByRelationAggregateInput
   passwordResetCodes?: Prisma.PasswordResetCodeOrderByRelationAggregateInput
   posts?: Prisma.PostOrderByRelationAggregateInput
-  likes?: Prisma.LikeOrderByRelationAggregateInput
+  reactions?: Prisma.ReactionOrderByRelationAggregateInput
   comments?: Prisma.CommentOrderByRelationAggregateInput
 }
 
@@ -263,7 +263,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   invitationsRedeemed?: Prisma.InvitationListRelationFilter
   passwordResetCodes?: Prisma.PasswordResetCodeListRelationFilter
   posts?: Prisma.PostListRelationFilter
-  likes?: Prisma.LikeListRelationFilter
+  reactions?: Prisma.ReactionListRelationFilter
   comments?: Prisma.CommentListRelationFilter
 }, "id" | "email">
 
@@ -313,7 +313,7 @@ export type UserCreateInput = {
   invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
 }
 
@@ -333,7 +333,7 @@ export type UserUncheckedCreateInput = {
   invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
 }
 
@@ -353,7 +353,7 @@ export type UserUpdateInput = {
   invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
 }
 
@@ -373,7 +373,7 @@ export type UserUncheckedUpdateInput = {
   invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
@@ -571,18 +571,18 @@ export type UserUpdateOneRequiredWithoutCommentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommentsInput, Prisma.UserUpdateWithoutCommentsInput>, Prisma.UserUncheckedUpdateWithoutCommentsInput>
 }
 
-export type UserCreateNestedOneWithoutLikesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutLikesInput, Prisma.UserUncheckedCreateWithoutLikesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLikesInput
+export type UserCreateNestedOneWithoutReactionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReactionsInput, Prisma.UserUncheckedCreateWithoutReactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReactionsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutLikesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutLikesInput, Prisma.UserUncheckedCreateWithoutLikesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLikesInput
-  upsert?: Prisma.UserUpsertWithoutLikesInput
+export type UserUpdateOneRequiredWithoutReactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReactionsInput, Prisma.UserUncheckedCreateWithoutReactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReactionsInput
+  upsert?: Prisma.UserUpsertWithoutReactionsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLikesInput, Prisma.UserUpdateWithoutLikesInput>, Prisma.UserUncheckedUpdateWithoutLikesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReactionsInput, Prisma.UserUpdateWithoutReactionsInput>, Prisma.UserUncheckedUpdateWithoutReactionsInput>
 }
 
 export type UserCreateWithoutAuthenticationInput = {
@@ -600,7 +600,7 @@ export type UserCreateWithoutAuthenticationInput = {
   invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
 }
 
@@ -619,7 +619,7 @@ export type UserUncheckedCreateWithoutAuthenticationInput = {
   invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
 }
 
@@ -654,7 +654,7 @@ export type UserUpdateWithoutAuthenticationInput = {
   invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
 }
 
@@ -673,7 +673,7 @@ export type UserUncheckedUpdateWithoutAuthenticationInput = {
   invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
@@ -692,7 +692,7 @@ export type UserCreateWithoutSessionsInput = {
   invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
 }
 
@@ -711,7 +711,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
 }
 
@@ -746,7 +746,7 @@ export type UserUpdateWithoutSessionsInput = {
   invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
 }
 
@@ -765,7 +765,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
@@ -784,7 +784,7 @@ export type UserCreateWithoutInvitationsCreatedInput = {
   invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
 }
 
@@ -803,7 +803,7 @@ export type UserUncheckedCreateWithoutInvitationsCreatedInput = {
   invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
 }
 
@@ -827,7 +827,7 @@ export type UserCreateWithoutInvitationsRedeemedInput = {
   invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
   passwordResetCodes?: Prisma.PasswordResetCodeCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
 }
 
@@ -846,7 +846,7 @@ export type UserUncheckedCreateWithoutInvitationsRedeemedInput = {
   invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
 }
 
@@ -881,7 +881,7 @@ export type UserUpdateWithoutInvitationsCreatedInput = {
   invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
 }
 
@@ -900,7 +900,7 @@ export type UserUncheckedUpdateWithoutInvitationsCreatedInput = {
   invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
@@ -930,7 +930,7 @@ export type UserUpdateWithoutInvitationsRedeemedInput = {
   invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
 }
 
@@ -949,7 +949,7 @@ export type UserUncheckedUpdateWithoutInvitationsRedeemedInput = {
   invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
@@ -968,7 +968,7 @@ export type UserCreateWithoutPasswordResetCodesInput = {
   invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
   invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
 }
 
@@ -987,7 +987,7 @@ export type UserUncheckedCreateWithoutPasswordResetCodesInput = {
   invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
   invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
 }
 
@@ -1022,7 +1022,7 @@ export type UserUpdateWithoutPasswordResetCodesInput = {
   invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
   invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
 }
 
@@ -1041,7 +1041,7 @@ export type UserUncheckedUpdateWithoutPasswordResetCodesInput = {
   invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
   invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
@@ -1060,7 +1060,7 @@ export type UserCreateWithoutPostsInput = {
   invitationsCreated?: Prisma.InvitationCreateNestedManyWithoutInviterInput
   invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeCreateNestedManyWithoutUserInput
-  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
 }
 
@@ -1079,7 +1079,7 @@ export type UserUncheckedCreateWithoutPostsInput = {
   invitationsCreated?: Prisma.InvitationUncheckedCreateNestedManyWithoutInviterInput
   invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedCreateNestedManyWithoutUserInput
-  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
 }
 
@@ -1114,7 +1114,7 @@ export type UserUpdateWithoutPostsInput = {
   invitationsCreated?: Prisma.InvitationUpdateManyWithoutInviterNestedInput
   invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUpdateManyWithoutUserNestedInput
-  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
 }
 
@@ -1133,7 +1133,7 @@ export type UserUncheckedUpdateWithoutPostsInput = {
   invitationsCreated?: Prisma.InvitationUncheckedUpdateManyWithoutInviterNestedInput
   invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedUpdateManyWithoutUserNestedInput
-  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
@@ -1153,7 +1153,7 @@ export type UserCreateWithoutCommentsInput = {
   invitationsRedeemed?: Prisma.InvitationCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeCreateNestedManyWithoutUserInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -1172,7 +1172,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   invitationsRedeemed?: Prisma.InvitationUncheckedCreateNestedManyWithoutRedeemerInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedCreateNestedManyWithoutUserInput
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -1207,7 +1207,7 @@ export type UserUpdateWithoutCommentsInput = {
   invitationsRedeemed?: Prisma.InvitationUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -1226,10 +1226,10 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   invitationsRedeemed?: Prisma.InvitationUncheckedUpdateManyWithoutRedeemerNestedInput
   passwordResetCodes?: Prisma.PasswordResetCodeUncheckedUpdateManyWithoutUserNestedInput
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateWithoutLikesInput = {
+export type UserCreateWithoutReactionsInput = {
   id?: string
   email: string
   realName: string
@@ -1248,7 +1248,7 @@ export type UserCreateWithoutLikesInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
 }
 
-export type UserUncheckedCreateWithoutLikesInput = {
+export type UserUncheckedCreateWithoutReactionsInput = {
   id?: string
   email: string
   realName: string
@@ -1267,23 +1267,23 @@ export type UserUncheckedCreateWithoutLikesInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
 }
 
-export type UserCreateOrConnectWithoutLikesInput = {
+export type UserCreateOrConnectWithoutReactionsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutLikesInput, Prisma.UserUncheckedCreateWithoutLikesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReactionsInput, Prisma.UserUncheckedCreateWithoutReactionsInput>
 }
 
-export type UserUpsertWithoutLikesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutLikesInput, Prisma.UserUncheckedUpdateWithoutLikesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutLikesInput, Prisma.UserUncheckedCreateWithoutLikesInput>
+export type UserUpsertWithoutReactionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReactionsInput, Prisma.UserUncheckedUpdateWithoutReactionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReactionsInput, Prisma.UserUncheckedCreateWithoutReactionsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutLikesInput = {
+export type UserUpdateToOneWithWhereWithoutReactionsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutLikesInput, Prisma.UserUncheckedUpdateWithoutLikesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReactionsInput, Prisma.UserUncheckedUpdateWithoutReactionsInput>
 }
 
-export type UserUpdateWithoutLikesInput = {
+export type UserUpdateWithoutReactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   realName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1302,7 +1302,7 @@ export type UserUpdateWithoutLikesInput = {
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
 }
 
-export type UserUncheckedUpdateWithoutLikesInput = {
+export type UserUncheckedUpdateWithoutReactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   realName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1332,7 +1332,7 @@ export type UserCountOutputType = {
   invitationsRedeemed: number
   passwordResetCodes: number
   posts: number
-  likes: number
+  reactions: number
   comments: number
 }
 
@@ -1342,7 +1342,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   invitationsRedeemed?: boolean | UserCountOutputTypeCountInvitationsRedeemedArgs
   passwordResetCodes?: boolean | UserCountOutputTypeCountPasswordResetCodesArgs
   posts?: boolean | UserCountOutputTypeCountPostsArgs
-  likes?: boolean | UserCountOutputTypeCountLikesArgs
+  reactions?: boolean | UserCountOutputTypeCountReactionsArgs
   comments?: boolean | UserCountOutputTypeCountCommentsArgs
 }
 
@@ -1394,8 +1394,8 @@ export type UserCountOutputTypeCountPostsArgs<ExtArgs extends runtime.Types.Exte
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.LikeWhereInput
+export type UserCountOutputTypeCountReactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReactionWhereInput
 }
 
 /**
@@ -1422,7 +1422,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   invitationsRedeemed?: boolean | Prisma.User$invitationsRedeemedArgs<ExtArgs>
   passwordResetCodes?: boolean | Prisma.User$passwordResetCodesArgs<ExtArgs>
   posts?: boolean | Prisma.User$postsArgs<ExtArgs>
-  likes?: boolean | Prisma.User$likesArgs<ExtArgs>
+  reactions?: boolean | Prisma.User$reactionsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -1471,7 +1471,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   invitationsRedeemed?: boolean | Prisma.User$invitationsRedeemedArgs<ExtArgs>
   passwordResetCodes?: boolean | Prisma.User$passwordResetCodesArgs<ExtArgs>
   posts?: boolean | Prisma.User$postsArgs<ExtArgs>
-  likes?: boolean | Prisma.User$likesArgs<ExtArgs>
+  reactions?: boolean | Prisma.User$reactionsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1487,7 +1487,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     invitationsRedeemed: Prisma.$InvitationPayload<ExtArgs>[]
     passwordResetCodes: Prisma.$PasswordResetCodePayload<ExtArgs>[]
     posts: Prisma.$PostPayload<ExtArgs>[]
-    likes: Prisma.$LikePayload<ExtArgs>[]
+    reactions: Prisma.$ReactionPayload<ExtArgs>[]
     comments: Prisma.$CommentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1900,7 +1900,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   invitationsRedeemed<T extends Prisma.User$invitationsRedeemedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invitationsRedeemedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   passwordResetCodes<T extends Prisma.User$passwordResetCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   posts<T extends Prisma.User$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  likes<T extends Prisma.User$likesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$likesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reactions<T extends Prisma.User$reactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   comments<T extends Prisma.User$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2472,27 +2472,27 @@ export type User$postsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
 }
 
 /**
- * User.likes
+ * User.reactions
  */
-export type User$likesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$reactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Like
+   * Select specific fields to fetch from the Reaction
    */
-  select?: Prisma.LikeSelect<ExtArgs> | null
+  select?: Prisma.ReactionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Like
+   * Omit specific fields from the Reaction
    */
-  omit?: Prisma.LikeOmit<ExtArgs> | null
+  omit?: Prisma.ReactionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.LikeInclude<ExtArgs> | null
-  where?: Prisma.LikeWhereInput
-  orderBy?: Prisma.LikeOrderByWithRelationInput | Prisma.LikeOrderByWithRelationInput[]
-  cursor?: Prisma.LikeWhereUniqueInput
+  include?: Prisma.ReactionInclude<ExtArgs> | null
+  where?: Prisma.ReactionWhereInput
+  orderBy?: Prisma.ReactionOrderByWithRelationInput | Prisma.ReactionOrderByWithRelationInput[]
+  cursor?: Prisma.ReactionWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.LikeScalarFieldEnum | Prisma.LikeScalarFieldEnum[]
+  distinct?: Prisma.ReactionScalarFieldEnum | Prisma.ReactionScalarFieldEnum[]
 }
 
 /**

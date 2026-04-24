@@ -15,7 +15,7 @@ model User {
   invitationsRedeemed Invitation[]        @relation("invitations_redeemed")
   passwordResetCodes  PasswordResetCode[]
   posts               Post[]
-  likes               Like[]
+  reactions           Reaction[]
   comments            Comment[]
 
   @@map("users")
@@ -88,10 +88,10 @@ model Post {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  author   User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  images   PostImage[]
-  likes    Like[]
-  comments Comment[]
+  author    User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  images    PostImage[]
+  reactions Reaction[]
+  comments  Comment[]
 
   @@map("posts")
 }
@@ -125,17 +125,50 @@ model Comment {
   @@map("comments")
 }
 
-model Like {
+model Reaction {
   id        String   @id @default(dbgenerated("uuidv7()"))
   postId    String   @map("post_id")
   userId    String   @map("user_id")
+  kind      Emotion
   createdAt DateTime @default(now()) @map("created_at")
 
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([postId, userId])
-  @@map("likes")
+  @@map("reactions")
+}
+
+enum Emotion {
+  admiration
+  adoration
+  aestheticAppreciation    @map("aesthetic_appreciation")
+  amusement
+  anger
+  anxiety
+  awe
+  awkwardness
+  boredom
+  calmness
+  confusion
+  craving
+  disgust
+  empathicPain             @map("empathic_pain")
+  entrancement
+  excitement
+  fear
+  horror
+  interest
+  joy
+  nostalgia
+  relief
+  romance
+  sadness
+  satisfaction
+  sexualDesire             @map("sexual_desire")
+  surprise
+
+  @@map("emotion")
 }
 
 generator client {

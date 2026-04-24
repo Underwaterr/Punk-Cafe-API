@@ -82,7 +82,7 @@ export type PostImage = Prisma.PostImageModel
  */
 export type Comment = Prisma.CommentModel
 /**
- * Model Like
+ * Model Reaction
  * 
  */
-export type Like = Prisma.LikeModel
+export type Reaction = Prisma.ReactionModel

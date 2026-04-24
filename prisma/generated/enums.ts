@@ -9,7 +9,34 @@
 * 🟢 You can import this file directly.
 */
 
+export const Emotion = {
+  admiration: 'admiration',
+  adoration: 'adoration',
+  aestheticAppreciation: 'aestheticAppreciation',
+  amusement: 'amusement',
+  anger: 'anger',
+  anxiety: 'anxiety',
+  awe: 'awe',
+  awkwardness: 'awkwardness',
+  boredom: 'boredom',
+  calmness: 'calmness',
+  confusion: 'confusion',
+  craving: 'craving',
+  disgust: 'disgust',
+  empathicPain: 'empathicPain',
+  entrancement: 'entrancement',
+  excitement: 'excitement',
+  fear: 'fear',
+  horror: 'horror',
+  interest: 'interest',
+  joy: 'joy',
+  nostalgia: 'nostalgia',
+  relief: 'relief',
+  romance: 'romance',
+  sadness: 'sadness',
+  satisfaction: 'satisfaction',
+  sexualDesire: 'sexualDesire',
+  surprise: 'surprise'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type Emotion = (typeof Emotion)[keyof typeof Emotion]

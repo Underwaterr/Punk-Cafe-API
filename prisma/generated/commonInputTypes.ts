@@ -189,6 +189,23 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
 }
 
+export type EnumEmotionFilter<$PrismaModel = never> = {
+  equals?: $Enums.Emotion | Prisma.EnumEmotionFieldRefInput<$PrismaModel>
+  in?: $Enums.Emotion[] | Prisma.ListEnumEmotionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Emotion[] | Prisma.ListEnumEmotionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmotionFilter<$PrismaModel> | $Enums.Emotion
+}
+
+export type EnumEmotionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Emotion | Prisma.EnumEmotionFieldRefInput<$PrismaModel>
+  in?: $Enums.Emotion[] | Prisma.ListEnumEmotionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Emotion[] | Prisma.ListEnumEmotionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmotionWithAggregatesFilter<$PrismaModel> | $Enums.Emotion
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmotionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmotionFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -375,6 +392,23 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumEmotionFilter<$PrismaModel = never> = {
+  equals?: $Enums.Emotion | Prisma.EnumEmotionFieldRefInput<$PrismaModel>
+  in?: $Enums.Emotion[] | Prisma.ListEnumEmotionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Emotion[] | Prisma.ListEnumEmotionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmotionFilter<$PrismaModel> | $Enums.Emotion
+}
+
+export type NestedEnumEmotionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Emotion | Prisma.EnumEmotionFieldRefInput<$PrismaModel>
+  in?: $Enums.Emotion[] | Prisma.ListEnumEmotionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Emotion[] | Prisma.ListEnumEmotionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmotionWithAggregatesFilter<$PrismaModel> | $Enums.Emotion
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmotionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmotionFilter<$PrismaModel>
 }
 
 
